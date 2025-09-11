@@ -1,20 +1,20 @@
 @extends('layouts.admintemplate')
-@section('title','Data Pelanggan')
+@section('title','Data Penjualan')
 @section('content')
 <div class="row">
   <div class="col-xxl">
     <div class="card mb-4">
       <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">Form Tambah Pelanggan</h5>
+        <h5 class="mb-0">Form Tambah Penjualan</h5>
       </div>
       <div class="card-body">
         <form action="{{ url('tambahpelanggansimpan') }}" method="POST">
           @csrf
           
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Nama Pelanggan</label>
+            <label class="col-sm-2 col-form-label">Nama Barang</label>
             <div class="col-sm-10">
-              <input type="text" name="namapelanggan" class="form-control" placeholder="Contoh: Budi Santoso" required>
+              <input type="text" name="namapelanggan" class="form-control" placeholder="Contoh: Beras Enak" required>
             </div>
           </div>
 

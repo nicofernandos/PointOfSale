@@ -54,15 +54,15 @@ class AdminController extends Controller
     }
 
 
-    public function kamar()
+    public function barang()
     {
         $kamars = Kamar::with('fotos')->get(); // ambil kamar dengan fotonya
-        return view('admin.kamar', compact('kamars'));
+        return view('admin.barang', compact('kamars'));
     }
 
-    public function tambahkamar()
+    public function tambahbarang()
     {
-        return view('admin.kamartambah');
+        return view('admin.barangtambah');
     }
     
     public function kamartambahsimpan(Request $request)
@@ -183,7 +183,6 @@ class AdminController extends Controller
                     if ($foto->isValid()) {
                         $fileName = 'kamar_' . $kamar->idkamar . '_' . time() . '_' . $index . '.' . $foto->getClientOriginalExtension();
                         $foto->storeAs('kamar_photos', $fileName, 'public');
-
                         Kamarfoto::create([
                             'idkamar' => $kamar->idkamar,
                             'foto'    => $fileName,
@@ -226,15 +225,15 @@ class AdminController extends Controller
         }
     }
 
-    public function layanan(){
+    public function stok(){
         $layanans = Layanantambahan::all();
-        return view('admin.layanan', compact('layanans'));
+        return view('admin.stok', compact('layanans'));
     }
 
 
-    public function tambahlayanan()
+    public function tambahstok()
     {
-        return view('admin.layanantambah');
+        return view('admin.stoktambah');
     }
 
     public function tambahlayanansimpan(Request $request)
@@ -268,13 +267,13 @@ class AdminController extends Controller
     }
 
 
-    public function tambahlayananhapus($id)
+    public function stokhapus($id)
     {
         Layanantambahan::destroy($id);
-        return redirect('layanan')->with('success', 'Data Layanan Tambahan Berhasil Dihapus');
+        return redirect('stok')->with('success', 'Data Stok Berhasil Dihapus');
     }
 
-    public function Tamu()
+    public function Penjualan()
     {
         $pelanggans = Pelanggan::all();
         return view('admin.pelanggan', compact('pelanggans'));

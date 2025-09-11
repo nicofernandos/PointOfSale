@@ -3,14 +3,14 @@
 @section('content')
 
 <div class="card">
-    <h5 class="card-header">Data Layanan Tambahan</h5>
+    <h5 class="card-header">Data Stok Tambahan</h5>
     <div class="card-body">
         <div class="table-responsive text-nowrap">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nama Layanan</th>
+                        <th>Nama Stok</th>
                         <th>Harga</th>
                         <th>Actions</th>
                     </tr>
@@ -26,7 +26,7 @@
                                     <i class="bx bx-edit-alt"></i> Edit
                                 </a>
 
-                                <form action="{{ url('tambahlayananhapus/'.$layanan->idlayanantambahan) }}" method="POST" style="display:inline;">
+                                <form action="{{ url('stokhapus/'.$layanan->idlayanantambahan) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus layanan ini?')">

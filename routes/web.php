@@ -19,23 +19,23 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
     Route::get('/dashboard', 'dashboard');
 
     //Kamar
-    Route::get('/kamar', 'kamar');
-    Route::get('/tambahkamar', 'tambahkamar');
-    Route::post('/kamartambahsimpan', 'kamartambahsimpan');
-    Route::get('/kamaredit/{id}', 'kamaredit');
-    Route::put('/kamareditupdate/{id}', 'kamareditupdate');
-    Route::delete('/kamarhapus/{id}', 'kamarhapus');
+    Route::get('/barang', 'barang');
+    Route::get('/tambahbarang', 'tambahbarang');
+    Route::post('/barangtambahsimpan', 'barangtambahsimpan');
+    Route::get('/barangedit/{id}', 'barangedit');
+    Route::put('/barangeditupdate/{id}', 'barangeditupdate');
+    Route::delete('/baranghapus/{id}', 'baranghapus');
 
-    //Layanan 
-    Route::get('/layanan', 'layanan');
-    Route::get('/tambahlayanan', 'tambahlayanan');
-    Route::post('/tambahlayanansimpan', 'tambahlayanansimpan');
-    Route::get('/tambahlayananedit/{id}', 'tambahlayananedit');
-    Route::put('/tambahlayananeditsimpan/{id}', 'tambahlayananeditsimpan');
-    Route::delete('/tambahlayananhapus/{id}', 'tambahlayananhapus');
+    //Stok 
+    Route::get('/stok', 'stok');
+    Route::get('/tambahstok', 'tambahstok');
+    Route::post('/tambahstoksimpan', 'tambahstoksimpan');
+    Route::get('/tambahstokedit/{id}', 'tambahstokedit');
+    Route::put('/tambahstokeditsimpan/{id}', 'tambahstokeditsimpan');
+    Route::delete('/stokhapus/{id}', 'stokhapus');
 
-    //Pelanggan
-    Route::get('/tamu', 'tamu');
+    //Penjualan
+    Route::get('/penjualan', 'penjualan');
     Route::get('/tambahtamu', 'tambahtamu');
     Route::post('/tambahpelanggansimpan', 'tambahpelanggansimpan');
     Route::get('/tamuedit/{id}', 'tamuedit');

@@ -65,39 +65,39 @@
                     @if(Auth::user()->role == 'Admin')
                     <!-- Data Management -->
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">Data Management</span></li>
-                    <li class="menu-item {{ request()->is('kamar*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->is('barang*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-box"></i>
                             <div data-i18n="Kamar">Kelola Barang</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('tambahkamar') ? 'active' : '' }}">
-                            <a href="{{ url('tambahkamar') }}" class="menu-link">
-                                <div data-i18n="Tambah Kamar">Tambah Barang</div>
+                            <li class="menu-item {{ request()->is('tambahbarang') ? 'active' : '' }}">
+                            <a href="{{ url('tambahbarang') }}" class="menu-link">
+                                <div data-i18n="Tambah Barang">Tambah Barang</div>
                             </a>
                             </li>
-                            <li class="menu-item {{ request()->is('kamar') ? 'active' : '' }}">
-                            <a href="{{ url('kamar') }}" class="menu-link">
-                                <div data-i18n="Daftar Kamar">Daftar Barang</div>
+                            <li class="menu-item {{ request()->is('barang') ? 'active' : '' }}">
+                            <a href="{{ url('barang') }}" class="menu-link">
+                                <div data-i18n="Daftar Barang">Daftar Barang</div>
                             </a>
                             </li>
                         </ul>
                     </li>
 
-                    <li class="menu-item {{ request()->is('layanan*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->is('stok*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-gift"></i>
-                            <div data-i18n="Layanan">Kelola Stok</div>
+                            <div data-i18n="stok">Kelola Stok</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('tambahlayanan') ? 'active' : '' }}">
-                                <a href="{{ url('tambahlayanan') }}" class="menu-link">
-                                    <div data-i18n="Tambah Layanan">Tambah Stok</div>
+                            <li class="menu-item {{ request()->is('tambahstok') ? 'active' : '' }}">
+                                <a href="{{ url('tambahstok') }}" class="menu-link">
+                                    <div data-i18n="Tambah Stok">Tambah Stok</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->is('layanan') ? 'active' : '' }}">
-                                <a href="{{ url('layanan') }}" class="menu-link">
-                                    <div data-i18n="Daftar Layanan">Daftar Stok</div>
+                            <li class="menu-item {{ request()->is('stok') ? 'active' : '' }}">
+                                <a href="{{ url('stok') }}" class="menu-link">
+                                    <div data-i18n="Daftar Stok">Daftar Stok</div>
                                 </a>
                             </li>
                         </ul>
@@ -160,18 +160,18 @@
                             </li>
                         </ul>
                     </li>
-
+{{-- 
 
                     <li class="menu-item {{ request()->is('laporantamu') ? 'active' : '' }}">
                         <a href="{{ url('laporantamu') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-file"></i>
                             <div data-i18n="Laporan Tamu">Laporan Tamu</div>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="menu-item {{ request()->is('laporankunjungan') ? 'active' : '' }}">
                         <a href="{{ url('laporankunjungan') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-line-chart"></i>
-                            <div data-i18n="Laporan Kunjungan">Laporan Kunjungan</div>
+                            <div data-i18n="Laporan Kunjungan">Laporan</div>
                         </a>
                     </li>
 
@@ -254,14 +254,7 @@
                     <footer class="content-footer footer bg-footer-theme">
                         <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div class="mb-2 mb-md-0">
-                                © <script>document.write(new Date().getFullYear());</script>, 
-                                 Mei 
-                                 Room Management System
-                            </div>
-                            <div>
-                                <a href="#" class="footer-link me-4">Bantuan</a>
-                                <a href="#" class="footer-link me-4">Dokumentasi</a>
-                                <a href="#" class="footer-link">Support</a>
+                                © <script>document.write(new Date().getFullYear());</script>, Point Of Sale
                             </div>
                         </div>
                     </footer>

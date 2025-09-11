@@ -279,9 +279,9 @@ class AdminController extends Controller
         return view('admin.pelanggan', compact('pelanggans'));
     }
 
-    public function tambahtamu()
+    public function tambahpenjualan()
     {
-        return view('admin.tambahpelanggan');
+        return view('admin.tambahpenjualan');
     }
 
     public function tambahpelanggansimpan(Request $request)
@@ -324,16 +324,16 @@ class AdminController extends Controller
 
 
     //Booking 
-    public function booking(){
+    public function pembelian(){
         $bookings = Booking::orderBy('tanggalbooking','desc')->get();
-        return view('admin.booking', compact('bookings'));
+        return view('admin.pembelian', compact('bookings'));
     }
 
-    public function bookingtambah(){
+    public function pembeliantambah(){
         $pelanggans = Pelanggan::all();
         $kamars = Kamar::all();
         $layanans = Layanantambahan::all();
-        return view('admin.bookingtambah', compact('pelanggans', 'kamars', 'layanans'));
+        return view('admin.pembeliantambah', compact('pelanggans', 'kamars', 'layanans'));
     }
 
     public function bookingtambahsimpan(Request $request)
@@ -454,7 +454,7 @@ class AdminController extends Controller
 
             FacadesDB::commit();
 
-            return redirect('booking')->with('success', 'Booking berhasil ditambahkan dengan No. Invoice: ' . $validatedData['noinvoice']);
+            return redirect('pembelian')->with('success', 'Booking berhasil ditambahkan dengan No. Invoice: ' . $validatedData['noinvoice']);
             
         } catch (\Exception $e) {
             FacadesDB::rollback();
@@ -781,7 +781,7 @@ class AdminController extends Controller
         return $pdf->stream('Laporan_Tamu.pdf');
     }
 
-    public function laporankunjungan(Request $request)
+    public function laporanpembelian(Request $request)
     { 
         $query = Booking::query();
 
@@ -799,7 +799,7 @@ class AdminController extends Controller
 
             $data = $query->paginate(10);
         
-        return view('admin.laporankunjungan', compact('data'));
+        return view('admin.laporanpembelian', compact('data'));
     }
 
     public function cetaklaporankunjungan(Request $request)
@@ -825,6 +825,11 @@ class AdminController extends Controller
         $pdf = FacadePdf::loadView('admin.cetaklaporankunjungan', compact('data'))
                         ->setPaper('a4', 'landscape');
         return $pdf->download('laporan_kunjungan.pdf');
+    }
+
+    public function laporanpenjualan()
+    {
+        return view('admin.laporanpenjualan'); 
     }
 
 

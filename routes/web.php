@@ -36,31 +36,33 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
 
     //Penjualan
     Route::get('/penjualan', 'penjualan');
-    Route::get('/tambahtamu', 'tambahtamu');
+    Route::get('/tambahpenjualan', 'tambahpenjualan');
     Route::post('/tambahpelanggansimpan', 'tambahpelanggansimpan');
     Route::get('/tamuedit/{id}', 'tamuedit');
     Route::put('/pelangganeditsimpan/{id}', 'pelangganeditsimpan');
     Route::delete('/pelangganhapus/{id}', 'pelangganhapus');
 
 
-    //Booking
-    Route::get('/booking', 'booking');
-    Route::get('/bookingtambah', 'bookingtambah');
-    Route::post('/bookingtambahsimpan', 'bookingtambahsimpan');
-    Route::get('/bookingedit/{id}', 'bookingedit');
-    Route::put('/bookingeditsimpan/{id}', 'bookingeditsimpan');
-    Route::delete('/bookinghapus/{id}', 'bookinghapus');
-    Route::get('/bookingdetail/{id}', 'bookingdetail');
+    //Pembelian
+    Route::get('/pembelian', 'pembelian');
+    Route::get('/pembeliantambah', 'pembeliantambah');
+    Route::post('/pembeliantambahsimpan', 'pembeliantambahsimpan');
+    Route::get('/pembelianedit/{id}', 'pembelianedit');
+    Route::put('/pembelianeditsimpan/{id}', 'pembelianeditsimpan');
+    Route::delete('/pembelianhapus/{id}', 'pembelianhapus');
+    Route::get('/pembeliandetail/{id}', 'pembeliandetail');
 
 
     //Laporan Tamu
     Route::get('/laporantamu', 'laporantamu');
     Route::get('/cetaklaporantamu', 'cetaklaporantamu');
 
-    //Laporan Kunjungan
-    Route::get('/laporankunjungan', 'laporankunjungan');
+    //Laporan Pembelian
+    Route::get('/laporanpembelian', 'laporanpembelian');
     Route::get('/cetaklaporankunjungan', 'cetaklaporankunjungan');
-
+    
+    //Laporan Pembelian
+    Route::get('/laporanpenjualan', 'laporanpenjualan');
     // Pengguna
     Route::get('/penggunadaftar', 'penggunadaftar');
     Route::get('/penggunatambah', 'penggunatambah');

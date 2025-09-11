@@ -1,10 +1,10 @@
 @extends('layouts.admintemplate')
-@section('title','Laporan Kunjungan')
+@section('title','Laporan Pembelian')
 @section('content')
 
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="mb-0">Laporan Kunjungan</h5>
+      <h5 class="mb-0">Laporan Pembelian</h5>
       <a href="{{ url('cetaklaporankunjungan', request()->all()) }}" target="_blank" class="btn btn-sm btn-primary">
           <i class="bx bx-printer"></i> Cetak
       </a>
@@ -40,38 +40,22 @@
                       <th>No Invoice</th>
                       <th>Nama Pelanggan</th>
                       <th>No. HP</th>
-                      <th>Tanggal Booking</th>
-                      <th>Tanggal Checkin</th>
-                      <th>Tanggal Checkout</th>
-                      <th>Jumlah Orang</th>
+                      <th>Tanggal Pembelian</th>
+                      <th>Jumlah Barang</th>
                       <th>Grand Total</th>
                   </tr>
               </thead>
               <tbody>
-                  @forelse($data as $i => $row)
-                      <tr>
-                          <td>{{ $i + $data->firstItem() }}</td>
-                          <td>{{ $row->noinvoice }}</td>
-                          <td>{{ $row->pelanggan->namapelanggan ?? '-' }}</td>
-                          <td>{{ $row->nohp }}</td>
-                          <td>{{ $row->tanggalbooking }}</td>
-                          <td>{{ $row->tanggalcheckin }}</td>
-                          <td>{{ $row->tanggalcheckout }}</td>
-                          <td>{{ $row->jumlahorang }}</td>
-                          <td>Rp {{ number_format($row->grandtotal, 0, ',', '.') }}</td>
-                      </tr>
-                  @empty
-                      <tr>
+
+                   <tr>
                           <td colspan="9" class="text-center">Tidak ada data</td>
                       </tr>
-                  @endforelse
               </tbody>
           </table>
       </div>
 
       <!-- Pagination -->
       <div class="mt-3">
-          {{ $data->links() }}
       </div>
   </div>
 </div>

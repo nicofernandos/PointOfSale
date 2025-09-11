@@ -109,14 +109,14 @@
                             <div data-i18n="Tamu">Kelola Penjualan</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('tambahtamu') ? 'active' : '' }}">
-                                <a href="{{ url('tambahtamu') }}" class="menu-link">
+                            <li class="menu-item {{ request()->is('tambahpenjualan') ? 'active' : '' }}">
+                                <a href="{{ url('tambahpenjualan') }}" class="menu-link">
                                     <div data-i18n="Tambah Tamu">Tambah Penjualan</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->is('tamu') ? 'active' : '' }}">
-                                <a href="{{ url('tamu') }}" class="menu-link">
-                                    <div data-i18n="Daftar tamu">Daftar Pelanggan</div>
+                            <li class="menu-item {{ request()->is('penjualan') ? 'active' : '' }}">
+                                <a href="{{ url('penjualan') }}" class="menu-link">
+                                    <div data-i18n="Daftar penjualan">Daftar Penjualan</div>
                                 </a>
                             </li>
                         </ul>
@@ -168,13 +168,19 @@
                             <div data-i18n="Laporan Tamu">Laporan Tamu</div>
                         </a>
                     </li> --}}
-                    <li class="menu-item {{ request()->is('laporankunjungan') ? 'active' : '' }}">
-                        <a href="{{ url('laporankunjungan') }}" class="menu-link">
+                    <li class="menu-item {{ request()->is('laporanpembelian') ? 'active' : '' }}">
+                        <a href="{{ url('laporanpembelian') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-line-chart"></i>
-                            <div data-i18n="Laporan Kunjungan">Laporan</div>
+                            <div data-i18n="Laporan Pembelian">Laporan Pembelian</div>
                         </a>
                     </li>
-
+                    
+                    <li class="menu-item {{ request()->is('laporanpenjualan') ? 'active' : '' }}">
+                        <a href="{{ url('laporanpenjualan') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-line-chart"></i>
+                            <div data-i18n="Laporan Penjualan">Laporan Penjualan</div>
+                        </a>
+                    </li>
 
                     @endif
 

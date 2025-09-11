@@ -1,11 +1,11 @@
 @extends('layouts.admintemplate')
-@section('title','Tambah Booking')
+@section('title','Tambah Pembelian')
 @section('content')
 <div class="row">
   <div class="col-xxl">
     <div class="card mb-4">
       <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">Form Tambah Booking</h5>
+        <h5 class="mb-0">Form Tambah Pembelian</h5>
       </div>
       <div class="card-body">
         <form action="{{ url('bookingtambahsimpan') }}" method="POST" enctype="multipart/form-data">
@@ -13,10 +13,10 @@
 
           {{-- Pilih Pelanggan --}}
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Pelanggan</label>
+            <label class="col-sm-2 col-form-label">Sales</label>
             <div class="col-sm-10">
               <select name="idpelanggan" class="form-control" required>
-                <option value="">-- Pilih Pelanggan --</option>
+                <option value="">-- Pilih Sales --</option>
                 @foreach($pelanggans as $pelanggan)
                   <option value="{{ $pelanggan->idpelanggan }}">{{ $pelanggan->namapelanggan }} - {{ $pelanggan->nohp }}</option>
                 @endforeach
@@ -26,10 +26,10 @@
 
           {{-- Pilih Kamar --}}
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Kamar</label>
+            <label class="col-sm-2 col-form-label">Barang</label>
             <div class="col-sm-10">
               <select name="idkamar" class="form-control" required>
-                <option value="">-- Pilih Kamar --</option>
+                <option value="">-- Pilih Barang --</option>
                 @foreach($kamars as $kamar)
                   <option value="{{ $kamar->idkamar }}">{{ $kamar->namakamar }} - Rp{{ number_format($kamar->harga,0,',','.') }}</option>
                 @endforeach
@@ -47,37 +47,15 @@
 
           {{-- Tanggal Booking --}}
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Tanggal Booking</label>
+            <label class="col-sm-2 col-form-label">Tanggal Barang Masuk</label>
             <div class="col-sm-10">
               <input type="date" name="tanggalbooking" class="form-control" value="{{ date('Y-m-d') }}" required>
             </div>
           </div>
 
-          {{-- Checkin --}}
-          <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Tanggal Checkin</label>
-            <div class="col-sm-5">
-              <input type="date" name="tanggalcheckin" class="form-control" required>
-            </div>
-            <div class="col-sm-5">
-              <input type="time" name="waktucheckin" class="form-control">
-            </div>
-          </div>
-
-          {{-- Checkout --}}
-          <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Tanggal Checkout</label>
-            <div class="col-sm-5">
-              <input type="date" name="tanggalcheckout" class="form-control" required>
-            </div>
-            <div class="col-sm-5">
-              <input type="time" name="waktucheckout" class="form-control">
-            </div>
-          </div>
-
           {{-- Jumlah Orang --}}
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Jumlah Orang</label>
+            <label class="col-sm-2 col-form-label">Jumlah Barang</label>
             <div class="col-sm-10">
               <input type="number" name="jumlahorang" class="form-control" min="1" required>
             </div>
@@ -85,7 +63,7 @@
 
           {{-- No HP --}}
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">No. HP</label>
+            <label class="col-sm-2 col-form-label">No. HP Sales</label>
             <div class="col-sm-10">
               <input type="text" name="nohp" class="form-control" required>
             </div>
@@ -93,7 +71,7 @@
 
           {{-- Foto Identitas --}}
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Foto Identitas</label>
+            <label class="col-sm-2 col-form-label">Foto Barang</label>
             <div class="col-sm-10">
               <input type="file" name="fotoidentitas" class="form-control">
             </div>
@@ -102,12 +80,12 @@
           <hr>
 
           {{-- Layanan Tambahan --}}
-          <h5 class="mb-3">Layanan Tambahan</h5>
+          <h5 class="mb-3">Barang Tambahan</h5>
           <div id="layanan-wrapper">
             <div class="row mb-3 layanan-item">
               <div class="col-sm-6">
                 <select name="layanan[0][idlayanantambahan]" class="form-control">
-                  <option value="">-- Pilih Layanan --</option>
+                  <option value="">-- Pilih Barang --</option>
                   @foreach($layanans as $layanan)
                     <option value="{{ $layanan->idlayanantambahan }}">{{ $layanan->namalayanantambahan }} - Rp{{ number_format($layanan->hargalayanantambahan,0,',','.') }}</option>
                   @endforeach

@@ -13,7 +13,7 @@
                         <th>No. Invoice</th>
                         <th>Nama</th>
                         <th>No. HP</th>
-                        <th>Tanggal Booking</th>
+                        <th>Tanggal Pembelian</th>
                         <th>Checkin</th>
                         <th>Checkout</th>
                         <th>Actions</th>

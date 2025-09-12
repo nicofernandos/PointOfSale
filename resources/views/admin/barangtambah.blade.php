@@ -1,6 +1,6 @@
 @extends('layouts.admintemplate')
 
-@section('title','Tambah Kamar')
+@section('title','Tambah Barang')
 
 @section('content')
 <div class="row">
@@ -10,11 +10,11 @@
         <h5 class="mb-0">Form Tambah Barang</h5>
       </div>
       <div class="card-body">
-        <form action="{{ url('kamartambahsimpan') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url('barangtambahsimpan') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Nama Kamar</label>
+            <label class="col-sm-2 col-form-label">Nama Barang</label>
             <div class="col-sm-10">
               <input type="text" name="namakamar" class="form-control" placeholder="Contoh: Beras Pulen" required>
             </div>
@@ -98,7 +98,7 @@
       
       const currentFotoCount = document.querySelectorAll('.foto-item').length;
       if(currentFotoCount >= maxFoto) {
-        alert('Maksimal 5 foto per kamar');
+        alert('Maksimal 5 foto per barang');
         return;
       }
       
@@ -182,7 +182,7 @@
     
     if (!hasPhoto) {
       e.preventDefault();
-      alert('Minimal harus mengupload 1 foto kamar');
+      alert('Minimal harus mengupload 1 foto barang');
       return false;
     }
   });

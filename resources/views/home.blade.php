@@ -215,6 +215,7 @@
                                     <script>
                                         document.write(new Date().getFullYear());
                                     </script>
+                                    CV Vittindo Digital Teknologi
                                 </p>
                             </div>
                         </div>

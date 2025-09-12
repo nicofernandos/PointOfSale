@@ -1,22 +1,21 @@
 @extends('layouts.admintemplate')
-@section('title','Data Stok Tambahan')
+@section('title','Data Kategori')
 @section('content')
 
 <div class="card">
-    <h5 class="card-header">Data Stok </h5>
+    <h5 class="card-header">Data Kategori</h5>
     <div class="card-body">
         <div class="table-responsive text-nowrap">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nama Stok</th>
-                        <th>Harga</th>
+                        <th>Nama Kategori</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($layanans as $layanan)
+                    {{-- @forelse($layanans as $layanan)
                         <tr>
                             <td>{{ $layanan->idlayanantambahan }}</td>
                             <td>{{ $layanan->namalayanantambahan }}</td>
@@ -37,9 +36,12 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center">Belum ada data stok</td>
+                            <td colspan="4" class="text-center">Belum ada data layanan tambahan</td>
                         </tr>
-                    @endforelse
+                    @endforelse --}}
+                    <tr>
+                            <td colspan="4" class="text-center">Belum ada data Kategori</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

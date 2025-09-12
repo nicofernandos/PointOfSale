@@ -65,7 +65,7 @@ class AdminController extends Controller
         return view('admin.barangtambah');
     }
     
-    public function kamartambahsimpan(Request $request)
+    public function barangtambahsimpan(Request $request)
     {
         // Validasi input
         $request->validate([
@@ -154,13 +154,13 @@ class AdminController extends Controller
         }
     }
 
-     public function kamaredit($id)
+     public function barangedit($id)
     {
         $kamar = Kamar::with('fotos')->findOrFail($id);
-        return view('admin.kamaredit', compact('kamar'));
+        return view('admin.barangedit', compact('kamar'));
     }
 
-    public function kamareditupdate(Request $request, $id)
+    public function barangeditupdate(Request $request, $id)
     {
         $request->validate([
             'namakamar' => 'required|string|max:255',
@@ -225,6 +225,14 @@ class AdminController extends Controller
         }
     }
 
+    public function kategori(){
+        return view('admin.kategori');
+    }
+
+    public function tambahkategori(){
+        return view('admin.tambahkategori');
+    }
+
     public function stok(){
         $layanans = Layanantambahan::all();
         return view('admin.stok', compact('layanans'));
@@ -273,15 +281,15 @@ class AdminController extends Controller
         return redirect('stok')->with('success', 'Data Stok Berhasil Dihapus');
     }
 
-    public function Penjualan()
+    public function Pelanggan()
     {
         $pelanggans = Pelanggan::all();
         return view('admin.pelanggan', compact('pelanggans'));
     }
 
-    public function tambahpenjualan()
+    public function tambahpelanggan()
     {
-        return view('admin.tambahpenjualan');
+        return view('admin.tambahpelanggan');
     }
 
     public function tambahpelanggansimpan(Request $request)
@@ -323,7 +331,18 @@ class AdminController extends Controller
     }
 
 
-    //Booking 
+    //Penjualan
+    public function penjualan(){
+        return view('admin.penjualan');
+    }
+
+    public function penjualantambah(){
+        return view('admin.penjualantambah');
+    }
+
+
+
+    //Pembelian 
     public function pembelian(){
         $bookings = Booking::orderBy('tanggalbooking','desc')->get();
         return view('admin.pembelian', compact('bookings'));

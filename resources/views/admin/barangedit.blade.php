@@ -1,21 +1,21 @@
 @extends('layouts.admintemplate')
-@section('title','Edit Kamar')
+@section('title','Edit Barang')
 @section('content')
 
 <div class="row">
   <div class="col-xxl">
     <div class="card mb-4">
       <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">Form Edit Kamar</h5>
+        <h5 class="mb-0">Form Edit Barang</h5>
       </div>
       <div class="card-body">
-        <form action="{{ url('kamareditupdate/'.$kamar->idkamar) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url('barangeditupdate/'.$kamar->idkamar) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           
           <!-- Nama -->
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Nama Kamar</label>
+            <label class="col-sm-2 col-form-label">Nama Barang</label>
             <div class="col-sm-10">
               <input type="text" name="namakamar" class="form-control" 
                      value="{{ old('namakamar', $kamar->namakamar) }}" required>
@@ -95,7 +95,7 @@
           <div class="row justify-content-end">
             <div class="col-sm-10">
               <button type="submit" class="btn btn-primary">Update</button>
-              <a href="{{ url('kamar') }}" class="btn btn-secondary">Batal</a>
+              <a href="{{ url('barang') }}" class="btn btn-secondary">Batal</a>
             </div>
           </div>
 
@@ -118,7 +118,7 @@
 
       const currentFotoCount = document.querySelectorAll('.foto-item').length;
       if(currentFotoCount >= maxFoto) {
-        alert('Maksimal 5 foto per kamar');
+        alert('Maksimal 5 foto per barang');
         return;
       }
 

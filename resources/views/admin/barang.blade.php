@@ -37,7 +37,7 @@
                             <td>Rp {{ number_format($kamar->harga, 0, ',', '.') }}</td>
                             <td>{{ $kamar->deskripsi }}</td>
                             <td>
-                                <a href="{{ url('kamaredit', $kamar->idkamar) }}" class="btn btn-sm btn-primary">
+                                <a href="{{ url('barangedit', $kamar->idkamar) }}" class="btn btn-sm btn-primary">
                                     <i class="bx bx-edit-alt"></i> Edit
                                 </a>
 

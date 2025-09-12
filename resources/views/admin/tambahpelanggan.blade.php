@@ -11,26 +11,14 @@
         <form action="{{ url('tambahpelanggansimpan') }}" method="POST">
           @csrf
           
-          <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Nama Barang</label>
-            <div class="col-sm-10">
-              <input type="text" name="namapelanggan" class="form-control" placeholder="Contoh: Beras Enak  " required>
-            </div>
-          </div>
-          
-          <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Jumlah Barang</label>
-            <div class="col-sm-10">
-              <input type="text" name="namapelanggan" class="form-control" placeholder="Contoh: 10 " required>
-            </div>
-          </div>
 
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Nama Pelanggan</label>
             <div class="col-sm-10">
-              <input type="text" name="nohp" class="form-control" placeholder="Contoh: Budi" required>
+              <input type="text" name="nohp" class="form-control" placeholder="Contoh: 08123456789" required>
             </div>
           </div>
+
 
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label">No. HP</label>
@@ -38,6 +26,15 @@
               <input type="text" name="nohp" class="form-control" placeholder="Contoh: 08123456789" required>
             </div>
           </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+              <input type="text" name="nohp" class="form-control" placeholder="Contoh: SugengPpe" required>
+            </div>
+          </div>
+
+
 
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Alamat</label>

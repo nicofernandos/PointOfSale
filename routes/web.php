@@ -9,7 +9,7 @@ Route::get('/', function () {
 });
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['isLogin'])->controller(AdminController::class)->group(function () {
     // Profile
@@ -18,7 +18,7 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
 
     Route::get('/dashboard', 'dashboard');
 
-    //Kamar
+    //Barang
     Route::get('/barang', 'barang');
     Route::get('/tambahbarang', 'tambahbarang');
     Route::post('/barangtambahsimpan', 'barangtambahsimpan');
@@ -34,11 +34,19 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
     Route::put('/tambahstokeditsimpan/{id}', 'tambahstokeditsimpan');
     Route::delete('/stokhapus/{id}', 'stokhapus');
 
-    //Penjualan
-    Route::get('/penjualan', 'penjualan');
-    Route::get('/tambahpenjualan', 'tambahpenjualan');
+    //Kategori
+    Route::get('/kategori','kategori');
+    Route::get('/tambahkategori','tambahkategori');
+    Route::post('/tambahkategorisimpan','tambahkategorisimpan');
+    Route::get('/kategoriedit/{id}','kategoriedit');
+    Route::put('/kategorieditsimpan/{id}','kategorieditsimpan');
+    Route::delete('/kategorihapus/{id}','kategorihapus');
+
+    //Pelanggan
+    Route::get('/pelanggan', 'pelanggan');
+    Route::get('/tambahpelanggan', 'tambahpelanggan');
     Route::post('/tambahpelanggansimpan', 'tambahpelanggansimpan');
-    Route::get('/tamuedit/{id}', 'tamuedit');
+    Route::get('/pelangganedit/{id}', 'pelangganedit');
     Route::put('/pelangganeditsimpan/{id}', 'pelangganeditsimpan');
     Route::delete('/pelangganhapus/{id}', 'pelangganhapus');
 
@@ -53,6 +61,16 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
     Route::get('/pembeliandetail/{id}', 'pembeliandetail');
 
 
+    //Penjualan
+    Route::get('/penjualan','penjualan');
+    Route::get('/penjualantambah','penjualantambah');
+    Route::get('penjualantambahsimpan','penjualantambahsimpan');
+    Route::get('/penjualanedit/{id}','penjualanedit');
+    Route::get('/penjualaneditsimpan/{id}','penjualaneditsimpan');
+    Route::get('/penjualanhapus','penjualanhapus');
+    Route::get('/pembeliandetail','pembeliandetail');
+
+
     //Laporan Tamu
     Route::get('/laporantamu', 'laporantamu');
     Route::get('/cetaklaporantamu', 'cetaklaporantamu');
@@ -63,11 +81,4 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
     
     //Laporan Pembelian
     Route::get('/laporanpenjualan', 'laporanpenjualan');
-    // Pengguna
-    Route::get('/penggunadaftar', 'penggunadaftar');
-    Route::get('/penggunatambah', 'penggunatambah');
-    Route::post('/penggunatambahsimpan', 'penggunatambahsimpan');
-    Route::get('/penggunaedit/{id}', 'penggunaedit');
-    Route::put('/penggunaeditsimpan/{id}', 'penggunaeditsimpan');
-    Route::delete('/penggunahapus/{id}', 'penggunahapus');
 });

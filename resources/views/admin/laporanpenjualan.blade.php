@@ -1,10 +1,10 @@
 @extends('layouts.admintemplate')
-@section('title','Laporan Pembelian')
+@section('title','Laporan Penjualan')
 @section('content')
 
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="mb-0">Laporan Pembelian</h5>
+      <h5 class="mb-0">Laporan Penjualan</h5>
       <a href="{{ url('cetaklaporankunjungan', request()->all()) }}" target="_blank" class="btn btn-sm btn-primary">
           <i class="bx bx-printer"></i> Cetak
       </a>
@@ -40,7 +40,7 @@
                       <th>No Invoice</th>
                       <th>Nama Pelanggan</th>
                       <th>No. HP</th>
-                      <th>Tanggal Pembelian</th>
+                      <th>Tanggal Penjualan</th>
                       <th>Jumlah Barang</th>
                       <th>Grand Total</th>
                   </tr>

@@ -84,6 +84,25 @@
                         </ul>
                     </li>
 
+                    <li class="menu-item {{ request()->is('kategori*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-note"></i>
+                            <div data-i18n="kategori">Kategori</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->is('tambahkategori') ? 'active' : '' }}">
+                                <a href="{{ url('tambahkategori') }}" class="menu-link">
+                                    <div data-i18n="Tambah Kategori">Tambah Kategori</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->is('kategori') ? 'active' : '' }}">
+                                <a href="{{ url('kategori') }}" class="menu-link">
+                                    <div data-i18n="Kategori">Daftar Kategori</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li class="menu-item {{ request()->is('stok*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-gift"></i>
@@ -109,8 +128,8 @@
                             <div data-i18n="Tamu">Kelola Penjualan</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('tambahpenjualan') ? 'active' : '' }}">
-                                <a href="{{ url('tambahpenjualan') }}" class="menu-link">
+                            <li class="menu-item {{ request()->is('penjualantambah') ? 'active' : '' }}">
+                                <a href="{{ url('penjualantambah') }}" class="menu-link">
                                     <div data-i18n="Tambah Tamu">Tambah Penjualan</div>
                                 </a>
                             </li>
@@ -122,19 +141,19 @@
                         </ul>
                     </li>
 
-                    <li class="menu-item {{ request()->is('booking*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->is('pembelian*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-book-alt"></i>
                             <div data-i18n="Pemesanan">Kelola Pembelian</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('bookingtambah') ? 'active' : '' }}">
-                                <a href="{{ url('bookingtambah') }}" class="menu-link">
-                                    <div data-i18n="Tambah Pemesanan">Tambah Pembelian</div>
+                            <li class="menu-item {{ request()->is('pembeliantambah') ? 'active' : '' }}">
+                                <a href="{{ url('pembeliantambah') }}" class="menu-link">
+                                    <div data-i18n="Pembelian Tambah">Tambah Pembelian</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->is('booking') ? 'active' : '' }}">
-                                <a href="{{ url('booking') }}" class="menu-link">
+                            <li class="menu-item {{ request()->is('pembelian') ? 'active' : '' }}">
+                                <a href="{{ url('pembelian') }}" class="menu-link">
                                     <div data-i18n="Daftar Pemesanan">Daftar Pembelian</div>
                                 </a>
                             </li>
@@ -142,19 +161,19 @@
                     </li>
 
 
-                    <li class="menu-item {{ request()->is('tamu*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->is('pelanggan*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-user"></i>
-                            <div data-i18n="Tamu">Pelanggan</div>
+                            <div data-i18n="pelanggan">Pelanggan</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('tambahtamu') ? 'active' : '' }}">
-                                <a href="{{ url('tambahtamu') }}" class="menu-link">
-                                    <div data-i18n="Tambah Tamu">Tambah Pelanggan</div>
+                            <li class="menu-item {{ request()->is('tambahpelanggan') ? 'active' : '' }}">
+                                <a href="{{ url('tambahpelanggan') }}" class="menu-link">
+                                    <div data-i18n="Tambah Pelanggan">Tambah Pelanggan</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->is('tamu') ? 'active' : '' }}">
-                                <a href="{{ url('tamu') }}" class="menu-link">
+                            <li class="menu-item {{ request()->is('pelanggan') ? 'active' : '' }}">
+                                <a href="{{ url('pelanggan') }}" class="menu-link">
                                     <div data-i18n="Daftar tamu">Daftar Pelanggan</div>
                                 </a>
                             </li>

@@ -11,15 +11,16 @@
                     <tr>
                         <th>No</th>
                         <th>No. Invoice</th>
-                        <th>Nama</th>
+                        <th>Nama Pelanggan</th>
                         <th>No. HP</th>
                         <th>Tanggal Pembelian</th>
-                        <th>Checkout</th>
+                        <th>Total Barang</th>
+                        <th>Grand Total</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($bookings as $index => $booking)
+                    {{-- @forelse($bookings as $index => $booking)
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $booking->noinvoice }}</td>
@@ -46,7 +47,7 @@
                         <tr>
                             <td colspan="8" class="text-center">Belum ada data booking</td>
                         </tr>
-                    @endforelse
+                    @endforelse --}}
                 </tbody>
             </table>
         </div>

@@ -27,6 +27,109 @@
     <link rel="stylesheet" href="{{ asset('adminasset/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('adminasset/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
+    <!-- Custom CSS untuk sidebar toggle -->
+    <style>
+        /* Override default layout behavior */
+        .layout-wrapper.layout-content-navbar .layout-container {
+            padding-left: 0 !important;
+        }
+        
+        /* Sidebar tersembunyi secara default */
+        .layout-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            position: fixed !important;
+            z-index: 1051;
+            width: 260px;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        /* Sidebar muncul ketika memiliki class 'show' */
+        .layout-menu.show {
+            transform: translateX(0);
+        }
+
+        /* Overlay gelap ketika sidebar terbuka */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Layout page full width */
+        .layout-page {
+            margin-left: 0 !important;
+            width: 100% !important;
+            min-height: 100vh;
+        }
+
+        /* Container full width */
+        .layout-container {
+            width: 100% !important;
+            padding-left: 0 !important;
+        }
+
+        /* Navbar full width */
+        .layout-navbar {
+            left: 0 !important;
+            width: 100% !important;
+            margin-left: 0 !important;
+        }
+
+        /* Content wrapper full width */
+        .content-wrapper {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+
+        /* Override template default styles */
+        @media (min-width: 1200px) {
+            .layout-wrapper.layout-content-navbar:not(.layout-without-menu) .layout-container {
+                padding-left: 0 !important;
+            }
+            
+            .layout-wrapper.layout-content-navbar .layout-page {
+                padding-left: 0 !important;
+                margin-left: 0 !important;
+            }
+        }
+
+        /* Menghilangkan tombol biru template default */
+        .layout-menu-toggle.d-xl-none,
+        .btn.btn-primary.menu-toggle {
+            display: none !important;
+        }
+
+        /* Pastikan toggle button terlihat */
+        .layout-menu-toggle.d-block {
+            display: flex !important;
+        }
+
+        /* Additional fixes */
+        body.layout-menu-fixed .layout-wrapper:not(.layout-without-menu) .layout-container .layout-page {
+            padding-left: 0 !important;
+        }
+
+        /* Remove any default menu spacing */
+        .layout-wrapper.layout-navbar-fixed .layout-container {
+            padding-left: 0 !important;
+        }
+    </style>
+
     <!-- Page CSS -->
     @yield('styles')
 
@@ -38,16 +141,20 @@
 <body>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
+        <!-- Sidebar overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
         <div class="layout-container">
-            <!-- Menu -->
+            <!-- Menu - Sidebar yang tersembunyi -->
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
                     <a href="{{ url('/') }}" class="app-brand-link">
-                        <span class="app-brand-text demo menu-text fw-bolder text-uppercase ms-2"> POS</span>
+                        <span class="app-brand-text demo menu-text fw-bolder text-uppercase ms-2">POS</span>
                     </a>
 
-                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-                        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                    <!-- Tombol close sidebar -->
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" id="closeSidebar">
+                        <i class="bx bx-x bx-sm align-middle"></i>
                     </a>
                 </div>
 
@@ -65,20 +172,20 @@
                     @if(Auth::user()->role == 'Admin')
                     <!-- Data Management -->
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">Data Management</span></li>
-                    <li class="menu-item {{ request()->is('barang*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->is('produk*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-box"></i>
-                            <div data-i18n="Kamar">Kelola Barang</div>
+                            <div data-i18n="produk">Kelola Produk</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('tambahbarang') ? 'active' : '' }}">
-                            <a href="{{ url('tambahbarang') }}" class="menu-link">
-                                <div data-i18n="Tambah Barang">Tambah Barang</div>
+                            <li class="menu-item {{ request()->is('tambahproduk') ? 'active' : '' }}">
+                            <a href="{{ url('tambahproduk') }}" class="menu-link">
+                                <div data-i18n="Tambah Barang">Tambah Produk</div>
                             </a>
                             </li>
-                            <li class="menu-item {{ request()->is('barang') ? 'active' : '' }}">
-                            <a href="{{ url('barang') }}" class="menu-link">
-                                <div data-i18n="Daftar Barang">Daftar Barang</div>
+                            <li class="menu-item {{ request()->is('produk') ? 'active' : '' }}">
+                            <a href="{{ url('produk') }}" class="menu-link">
+                                <div data-i18n="Daftar Produk">Daftar Produk</div>
                             </a>
                             </li>
                         </ul>
@@ -122,7 +229,7 @@
                         </ul>
                     </li>
 
-                      <li class="menu-item {{ request()->is('tamu*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->is('tamu*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-book"></i>
                             <div data-i18n="Tamu">Kelola Penjualan</div>
@@ -160,7 +267,6 @@
                         </ul>
                     </li>
 
-
                     <li class="menu-item {{ request()->is('pelanggan*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-user"></i>
@@ -179,14 +285,7 @@
                             </li>
                         </ul>
                     </li>
-{{-- 
 
-                    <li class="menu-item {{ request()->is('laporantamu') ? 'active' : '' }}">
-                        <a href="{{ url('laporantamu') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-file"></i>
-                            <div data-i18n="Laporan Tamu">Laporan Tamu</div>
-                        </a>
-                    </li> --}}
                     <li class="menu-item {{ request()->is('laporanpembelian') ? 'active' : '' }}">
                         <a href="{{ url('laporanpembelian') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-line-chart"></i>
@@ -202,7 +301,6 @@
                     </li>
 
                     @endif
-
                 </ul>
             </aside>
             <!-- / Menu -->
@@ -211,8 +309,9 @@
             <div class="layout-page">
                 <!-- Navbar -->
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
-                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                    <!-- Tombol toggle sidebar -->
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-block">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)" id="toggleSidebar">
                             <i class="bx bx-menu bx-sm"></i>
                         </a>
                     </div>
@@ -291,9 +390,6 @@
             </div>
             <!-- / Layout page -->
         </div>
-
-        <!-- Overlay -->
-        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
 
@@ -309,6 +405,73 @@
 
     <!-- Main JS -->
     <script src="{{ asset('adminasset/assets/js/main.js') }}"></script>
+
+    <!-- Custom JavaScript untuk sidebar toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('toggleSidebar');
+            const closeButton = document.getElementById('closeSidebar');
+            const sidebar = document.getElementById('layout-menu');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            // Function to show sidebar
+            function showSidebar() {
+                sidebar.classList.add('show');
+                overlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+
+            // Function to hide sidebar
+            function hideSidebar() {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+
+            // Toggle sidebar when clicking menu button
+            toggleButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (sidebar.classList.contains('show')) {
+                    hideSidebar();
+                } else {
+                    showSidebar();
+                }
+            });
+
+            // Close sidebar when clicking close button
+            closeButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideSidebar();
+            });
+
+            // Close sidebar when clicking overlay
+            overlay.addEventListener('click', function() {
+                hideSidebar();
+            });
+
+            // Close sidebar when pressing Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+                    hideSidebar();
+                }
+            });
+
+            // Close sidebar when clicking menu links (optional)
+            const menuLinks = sidebar.querySelectorAll('.menu-link:not(.menu-toggle)');
+            menuLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    // Delay to allow navigation
+                    setTimeout(hideSidebar, 100);
+                });
+            });
+
+            // Disable default template menu behavior
+            const templateMenuToggles = document.querySelectorAll('.layout-menu-toggle:not(#toggleSidebar):not(#closeSidebar)');
+            templateMenuToggles.forEach(function(toggle) {
+                toggle.style.display = 'none';
+            });
+        });
+    </script>
 
     <!-- Page JS -->
     @yield('script')

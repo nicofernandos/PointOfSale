@@ -1,9 +1,9 @@
 @extends('layouts.admintemplate')
-@section('title','Data Barang')
+@section('title','Data Produk')
 @section('content')
 
 <div class="card">
-    <h5 class="card-header">Data Barang</h5>
+    <h5 class="card-header">Data Produk</h5>
     <div class="card-body">
         <div class="table-responsive text-nowrap">
             <table class="table table-bordered align-middle">
@@ -11,7 +11,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Foto</th>
-                        <th>Nama Barang</th>
+                        <th>Nama Produk</th>
                         <th>Tipe</th>
                         <th>Harga</th>
                         <th>Deskripsi</th>
@@ -41,10 +41,10 @@
                                     <i class="bx bx-edit-alt"></i> Edit
                                 </a>
 
-                                <form action="{{ url('kamarhapus/'.$kamar->idkamar) }}" method="POST" style="display:inline;">
+                                <form action="{{ url('baranghapus/'.$kamar->idkamar) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus kamar ini?')">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus produk ini?')">
                                         <i class="bx bx-trash"></i> Delete
                                     </button>
                                 </form>
@@ -52,7 +52,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">Belum ada data kamar</td>
+                            <td colspan="7" class="text-center">Belum ada data produk</td>
                         </tr>
                     @endforelse
                 </tbody>

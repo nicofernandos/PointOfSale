@@ -54,15 +54,15 @@ class AdminController extends Controller
     }
 
 
-    public function barang()
+    public function produk()
     {
-        $kamars = Kamar::with('fotos')->get(); // ambil kamar dengan fotonya
-        return view('admin.barang', compact('kamars'));
+        $kamars = Kamar::with('fotos')->get(); 
+        return view('admin.produk', compact('kamars'));
     }
 
-    public function tambahbarang()
+    public function tambahproduk()
     {
-        return view('admin.barangtambah');
+        return view('admin.produktambah');
     }
     
     public function barangtambahsimpan(Request $request)
@@ -201,7 +201,7 @@ class AdminController extends Controller
 
 
 
-    public function kamarhapus($id)
+    public function baranghapus($id)
     {
         FacadesDB::beginTransaction();
         try {
@@ -218,10 +218,10 @@ class AdminController extends Controller
             $kamar->delete();
 
             FacadesDB::commit();
-            return redirect('kamar')->with('success', 'Data kamar berhasil dihapus');
+            return redirect('produk')->with('success', 'Data Produk berhasil dihapus');
         } catch (\Exception $e) {
             FacadesDB::rollBack();
-            return back()->withErrors(['error' => 'Gagal hapus kamar: '.$e->getMessage()]);
+            return back()->withErrors(['error' => 'Gagal hapus produk: '.$e->getMessage()]);
         }
     }
 
@@ -302,10 +302,10 @@ class AdminController extends Controller
 
         Pelanggan::create($request->all());
 
-        return redirect('tamu')->with('success', 'Data Tamu Berhasil Ditambahkan');
+        return redirect('pelanggan')->with('success', 'Data Pelanggan Berhasil Ditambahkan');
     }
 
-    public function tamuedit($id)
+    public function pelangganedit($id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
         return view('admin.pelangganedit', compact('pelanggan'));
@@ -322,12 +322,12 @@ class AdminController extends Controller
         $pelanggan = Pelanggan::findOrFail($id);
         $pelanggan->update($request->all());
 
-        return redirect('tamu')->with('success', 'Data Tamu Berhasil Diubah');
+        return redirect('pelanggan')->with('success', 'Data Pelanggan Berhasil Diubah');
     }  
 
     public function pelangganhapus($id){
         Pelanggan::destroy($id);
-        return redirect('Tamu')->with('success', 'Data Tamu Berhasil Dihapus');
+        return redirect('pelanggan')->with('success', 'Data Pelanggan Berhasil Dihapus');
     }
 
 

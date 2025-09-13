@@ -24,7 +24,7 @@
                             <td>{{ $pelanggan->nohp }}</td>
                             <td>{{ $pelanggan->alamat }}</td>
                             <td>
-                                <a href="{{ url('tamuedit', $pelanggan->idpelanggan) }}" class="btn btn-sm btn-primary">
+                                <a href="{{ url('pelangganedit', $pelanggan->idpelanggan) }}" class="btn btn-sm btn-primary">
                                     <i class="bx bx-edit-alt"></i> Edit
                                 </a>
 

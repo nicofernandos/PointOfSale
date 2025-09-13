@@ -13,16 +13,16 @@
           @csrf
           
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Nama Stok</label>
+            <label class="col-sm-2 col-form-label">Nama Barang</label>
             <div class="col-sm-10">
-              <input type="text" name="namalayanantambahan" class="form-control" placeholder="Contoh: Beras Enak" required>
+              <input type="text" name="" class="form-control" placeholder="Contoh: Beras Enak" required>
             </div>
           </div>
 
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Harga Stok</label>
+            <label class="col-sm-2 col-form-label">Stok</label>
             <div class="col-sm-10">
-              <input type="number" name="hargalayanantambahan" class="form-control" placeholder="Contoh: 20000" required>
+              <input type="number" name="" class="form-control" placeholder="Contoh: 20000" required>
             </div>
           </div>
 

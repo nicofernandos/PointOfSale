@@ -54,14 +54,14 @@
                     </div>
                   </div>
                   
-                  <div class="row">
+                  {{-- <div class="row">
                     <div class="col-sm-12">
                       <button type="button" class="btn btn-outline-primary btn-sm add-foto">
                         <i class="bx bx-plus"></i> Tambah Foto Lainnya
                       </button>
                       <small class="text-muted ms-2">Maksimal 5 foto per kamar</small>
                     </div>
-                  </div>
+                  </div> --}}
                 </div>
               </div>
             </div>

@@ -62,18 +62,25 @@
 @endsection
 
 <div class="row g-3">
-  <!-- Cart Section - Left Side -->
   <div class="col-lg-5 col-md-12">
     <div class="card h-100">
       <div class="card-header d-flex align-items-center justify-content-between bg-primary text-white">
         <h5 class="mb-0 text-white">
           <i class="bx bx-shopping-bag me-2"></i>Keranjang
         </h5>
-        <span class="badge bg-white text-primary" id="cart-count">0</span>
       </div>
       <div class="card-body p-0">
         <!-- Customer Selection -->
         <div class="p-3 border-bottom">
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">No. Invoice</label>
+            <div class="col-sm-10">
+              <input type="text" name="noinvoice" class="form-control" value="INV{{ date('YmdHis') }}" readonly>
+            </div>
+          </div>
+
+
           <div class="mb-3">
             <label class="form-label fw-semibold">Pelanggan</label>
             <select name="idpelanggan" class="form-select" id="customer-select">
@@ -113,23 +120,17 @@
     </div>
   </div>
 
-  <!-- Product Catalog - Right Side -->
   <div class="col-lg-7 col-md-12">
     <div class="card h-100">
       <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="mb-0">Katalog Produk</h5>
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-primary btn-sm" id="refresh-products">
-            <i class="bx bx-refresh"></i>
-          </button>
-        </div>
       </div>
       <div class="card-body">
         <!-- Search Bar -->
         <div class="mb-3">
           <div class="input-group">
             <span class="input-group-text"><i class="bx bx-search"></i></span>
-            <input type="text" class="form-control" placeholder="Cari produk..." id="search-products">
+            <input type="text" class="form-control" placeholder="Cari produk" id="search-products">
           </div>
         </div>
 
@@ -139,6 +140,12 @@
                 <li class="nav-item">
                 <button class="nav-link active" data-category="all">Semua</button>
                 </li>
+                <li class="nav-item">
+                <button class="nav-link" data-category="Makanan">Makanan</button>
+                </li>
+                <li class="nav-item">
+                <button class="nav-link" data-category="minuman">Minuman</button>
+                </li>
                 {{-- @foreach($categories as $category)
                 <li class="nav-item">
                 <button class="nav-link" data-category="{{ $category }}">{{ ucfirst($category) }}</button>
@@ -146,11 +153,7 @@
                 @endforeach --}}
             </ul>
         </div>
-
-
-        <!-- Product Grid -->
         <div class="row g-3" id="product-grid" style="max-height: 500px; overflow-y: auto;">
-          <!-- Sample Products -->
           <div class="col-6 col-md-4 col-lg-3">
             <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
               <div class="card-img-wrapper position-relative">
@@ -158,6 +161,76 @@
               </div>
               <div class="card-body p-2">
                 <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
+                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
+                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
+                  <i class="bx bx-plus"></i> Tambah
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
+              <div class="card-img-wrapper position-relative">
+                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
+              </div>
+              <div class="card-body p-2">
+                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
+                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
+                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
+                  <i class="bx bx-plus"></i> Tambah
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
+              <div class="card-img-wrapper position-relative">
+                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
+              </div>
+              <div class="card-body p-2">
+                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
+                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
+                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
+                  <i class="bx bx-plus"></i> Tambah
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
+              <div class="card-img-wrapper position-relative">
+                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
+              </div>
+              <div class="card-body p-2">
+                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
+                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
+                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
+                  <i class="bx bx-plus"></i> Tambah
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
+              <div class="card-img-wrapper position-relative">
+                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
+              </div>
+              <div class="card-body p-2">
+                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
+                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
+                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
+                  <i class="bx bx-plus"></i> Tambah
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card h-100" data-category="Makanan" data-id="2" data-name="Es Kopi" data-price="15000">
+              <div class="card-img-wrapper position-relative">
+                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
+              </div>
+              <div class="card-body p-2">
+                <h6 class="card-title mb-1 text-truncate">Es Kopi</h6>
                 <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
                 <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
                   <i class="bx bx-plus"></i> Tambah

@@ -44,7 +44,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center">Belum ada data booking</td>
+                            <td colspan="8" class="text-center">Belum ada data Pembelian</td>
                         </tr>
                     @endforelse
                 </tbody>

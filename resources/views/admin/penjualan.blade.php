@@ -48,6 +48,9 @@
                             <td colspan="8" class="text-center">Belum ada data booking</td>
                         </tr>
                     @endforelse --}}
+                    <tr>
+                        <td colspan="8" class="text-center">Belum ada data Pembelian</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

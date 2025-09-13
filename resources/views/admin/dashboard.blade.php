@@ -8,6 +8,7 @@
     {{-- Dashboard untuk Admin --}}
     @if (Auth::user()->role == 'Admin')
 
+    {{-- Pelanggan --}}
       <div class="col-lg-6 col-md-12 col-6 mb-4">
           <div class="card">
               <div class="card-body">
@@ -21,7 +22,7 @@
               </div>
           </div>
       </div>
-      <!-- Card Layanan Tambahan -->
+      <!-- Card Total Barang -->
       <div class="col-lg-6 col-md-12 col-6 mb-4">
           <div class="card">
               <div class="card-body">
@@ -35,7 +36,7 @@
               </div>
           </div>
       </div>
-      <!-- Card Kamar -->
+      <!-- Card Barang -->
       <div class="col-lg-6 col-md-12 col-6 mb-4">
           <div class="card">
               <div class="card-body">
@@ -49,7 +50,7 @@
               </div>
           </div>
       </div>
-      <!-- Card Booking -->
+      <!-- Card Penjualan -->
       <div class="col-lg-6 col-md-12 col-6 mb-4">
           <div class="card">
               <div class="card-body">
@@ -64,7 +65,48 @@
           </div>
       </div>
 
-      <!-- Grafik Booking Bulanan -->
+        {{-- Pemasukkan Hari Ini --}}
+        <div class="col-lg-7 col-md-12 col-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <span class="fw-medium d-block mb-1 text-muted">Pemasukkan Hari Ini</span>
+                            <h3 class="card-title text-nowrap mb-2 text-success">Rp. 100.000</h3>
+                            <small class="text-success fw-medium">
+                                <i class="bx bx-up-arrow-alt"></i>10%  dari kemarin
+                            </small>
+                        </div>
+                        <div class="avatar flex-shrink">
+                            <i class="bx bxs-wallet text-success" style="font-size:2.2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Pemasukkan Bulan Ini --}}
+
+        <div class="col-lg-5 col-md-12 col-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div class="row">
+                            <span class="fw-medium d-block mb-1 text-muted">Pemasukkan Bulan ini</span>
+                            <h3 class="card-title text-nowrap mb-2 text-success">Rp.1.100.000</h3>
+                            <small class="text-success fw-medium">
+                                <i class="bx bx-up-arrow-alt"></i> 23% dari bulan lalu
+                            </small>
+                        </div>
+                        <div class="avatar flex-shrink">
+                            <i class="bx bxs-credit-card text-success" style="font-size:2.2rem"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      <!-- Grafik Penjualan Bulanan -->
       <div class="col-12 mb-4">
           <div class="card">
               <div class="card-header d-flex justify-content-between align-items-center">
@@ -94,7 +136,7 @@
                 data: {
                     labels: @json($bookingLabels),
                     datasets: [{
-                        label: 'Jumlah Booking',
+                        label: 'Jumlah Penjualan',
                         data: @json($bookingCounts),
                         backgroundColor: [
                             'rgba(75, 192, 192, 0.6)',

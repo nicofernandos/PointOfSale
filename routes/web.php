@@ -19,8 +19,8 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
     Route::get('/dashboard', 'dashboard');
 
     //Barang
-    Route::get('/barang', 'barang');
-    Route::get('/tambahbarang', 'tambahbarang');
+    Route::get('/produk', 'produk');
+    Route::get('/tambahproduk', 'tambahproduk');
     Route::post('/barangtambahsimpan', 'barangtambahsimpan');
     Route::get('/barangedit/{id}', 'barangedit');
     Route::put('/barangeditupdate/{id}', 'barangeditupdate');

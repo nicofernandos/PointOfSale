@@ -5,6 +5,7 @@ use App\Models\Layanantambahan;
 use App\Models\Pelanggan;
 use App\Models\Booking;
 use App\Models\Kamarfoto;
+use App\Models\Barang;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
@@ -336,10 +337,16 @@ class AdminController extends Controller
         return view('admin.penjualan');
     }
 
-    public function penjualantambah(){
-        return view('admin.penjualantambah');
-    }
 
+    public function penjualantambah(){
+        $barangs = FacadesDB::table('tbarang')
+        ->join('thargajual','tbarang.id', '=', 'thargajual.idbar')
+        ->leftjoin('tbarangfoto','tbarang.id', '=', 'tbarangfoto.idbar')
+        ->select('tbarang.*','thargajual.har as hargajual',
+        'tbarangfoto.img as foto')
+        ->get();        
+        return view('admin.penjualantambah', compact('barangs'));
+    }
 
 
     //Pembelian 

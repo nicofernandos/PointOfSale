@@ -48,7 +48,7 @@
                                         src="{{ asset('foto/logo.png') }}" width="100" alt=""></a>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-3">
+                        {{-- <div class="col-lg-3 col-md-3">
                             <div class="menu-wrapper">
                                 <div class="main-menu">
                                     <nav class="d-none d-lg-block">
@@ -59,7 +59,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-12">
                             <div class="mobile_menu d-block d-lg-none"></div>
                         </div>
@@ -101,8 +101,7 @@
                 </div>
 
             </div>
-            <div class="apply-process-area apply-bg pt-150 pb-150"
-                data-background="foto/bgatas.jpg">
+            <div class="apply-process-area apply-bg pt-150 pb-150 bg-blue" style="background-color: blue !important;">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-12">
@@ -121,7 +120,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="mb-2 text-white">Username</label>
-                                            <input class="form-control valid" name="username" type="text"
+                                            <input class="form-control valid"  name="username" type="text"
                                                 onfocus="this.placeholder = ''"
                                                 onblur="this.placeholder = 'Masukkan Username'"
                                                 placeholder="Masukkan Username" required>
@@ -186,20 +185,6 @@
 
                         </div>
                     </div>
-
-                    {{-- <div class="col-xl-6 col-lg-6 col-md-4 col-sm-5">
-                        <div class="single-footer-caption mb-50">
-                            <div class="footer-tittle">
-                                <h4>Map</h4>
-                                <div class="footer-pera footer-pera2">
-                                    <iframe
-                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63374.46789828451!2d109.40410612929992!3d-6.902054116552553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fdae32317de1f%3A0x62789aa5c029e3ff!2sToko%20Jelita!5e0!3m2!1sid!2sid!4v1729751814247!5m2!1sid!2sid"
-                                        width="600" height="350" style="border:0;" allowfullscreen=""
-                                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
         </div>

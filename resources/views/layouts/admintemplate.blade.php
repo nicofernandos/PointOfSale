@@ -154,7 +154,7 @@
 
                     <!-- Tombol close sidebar -->
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" id="closeSidebar">
-                        <i class="bx bx-x bx-sm align-middle"></i>
+                        {{-- <i class="bx bx-x bx-sm align-middle "></i> --}}
                     </a>
                 </div>
 
@@ -306,7 +306,7 @@
             <!-- / Menu -->
 
             <!-- Layout container -->
-            <div class="layout-page">
+            <div class="layout-page ">
                 <!-- Navbar -->
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
                     <!-- Tombol toggle sidebar -->
@@ -405,8 +405,6 @@
 
     <!-- Main JS -->
     <script src="{{ asset('adminasset/assets/js/main.js') }}"></script>
-
-    <!-- Custom JavaScript untuk sidebar toggle -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toggleButton = document.getElementById('toggleSidebar');
@@ -414,21 +412,17 @@
             const sidebar = document.getElementById('layout-menu');
             const overlay = document.getElementById('sidebarOverlay');
 
-            // Function to show sidebar
             function showSidebar() {
                 sidebar.classList.add('show');
                 overlay.classList.add('show');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
+                document.body.style.overflow = 'hidden'; 
             }
-
-            // Function to hide sidebar
             function hideSidebar() {
                 sidebar.classList.remove('show');
                 overlay.classList.remove('show');
-                document.body.style.overflow = ''; // Restore scrolling
+                document.body.style.overflow = ''; 
             }
 
-            // Toggle sidebar when clicking menu button
             toggleButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 if (sidebar.classList.contains('show')) {
@@ -438,41 +432,34 @@
                 }
             });
 
-            // Close sidebar when clicking close button
             closeButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 hideSidebar();
             });
 
-            // Close sidebar when clicking overlay
             overlay.addEventListener('click', function() {
                 hideSidebar();
             });
 
-            // Close sidebar when pressing Escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && sidebar.classList.contains('show')) {
                     hideSidebar();
                 }
             });
 
-            // Close sidebar when clicking menu links (optional)
+        
             const menuLinks = sidebar.querySelectorAll('.menu-link:not(.menu-toggle)');
             menuLinks.forEach(function(link) {
                 link.addEventListener('click', function() {
-                    setTimeout(hideSidebar, 100);
+                    setTimeout(hideSidebar,0);
                 });
             });
-
-            // Disable default template menu behavior
             const templateMenuToggles = document.querySelectorAll('.layout-menu-toggle:not(#toggleSidebar):not(#closeSidebar)');
             templateMenuToggles.forEach(function(toggle) {
                 toggle.style.display = 'none';
             });
         });
     </script>
-
-    <!-- Page JS -->
     @yield('script')
 </body>
 </html>

@@ -66,28 +66,13 @@
     <div class="card h-100">
       <div class="card-header d-flex align-items-center justify-content-between bg-primary text-white">
         <h5 class="mb-0 text-white">
-          <i class="bx bx-shopping-bag me-2"></i>Keranjang
+          <i class="bx bx-shopping-bag me-2"></i>Keranjang  
         </h5>
+        <span class="badge bg-light text-primary" id="cart-count">0</span>
       </div>
       <div class="card-body p-0">
         <!-- Customer Selection -->
         <div class="p-3 border-bottom">
-
-          <div class="mb-3">
-            <label class="form-label fw-semibold">No. Invoice</label>
-            <div class="col-sm-10">
-              <input type="text" name="noinvoice" class="form-control" value="INV{{ date('YmdHis') }}" readonly>
-            </div>
-          </div>
-
-
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Pelanggan</label>
-            <select name="idpelanggan" class="form-select" id="customer-select">
-              <option value="">-- Pilih Pelanggan --</option>
-              <!-- Dynamic options here -->
-            </select>
-          </div>
           <div class="mb-3">
             <label class="form-label fw-semibold">No. HP</label>
             <input type="text" name="nohp" class="form-control" id="customer-phone" placeholder="No. HP Pelanggan">
@@ -121,123 +106,56 @@
   </div>
 
   <div class="col-lg-7 col-md-12">
-    <div class="card h-100">
-      <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">Katalog Produk</h5>
+    <div class="card h-100 ">
+      <div class="card-header bg-success d-flex align-items-center justify-content-between">
+        <h5 class="mb-0 text-white">Katalog Produk</h5>
+        <button class="btn btn-outline-light btn-sm" id="refresh-products">
+          <i class="bx bx-refresh"></i>
+        </button>
       </div>
       <div class="card-body">
-        <!-- Search Bar -->
         <div class="mb-3">
           <div class="input-group">
             <span class="input-group-text"><i class="bx bx-search"></i></span>
-            <input type="text" class="form-control" placeholder="Cari produk" id="search-products">
+            <input type="text" class="form-control" placeholder="Cari produk..." id="search-products">
           </div>
         </div>
 
         <!-- Category Tabs -->
         <div class="mb-3">
-            <ul class="nav nav-pills" id="category-tabs">
-                <li class="nav-item">
-                <button class="nav-link active" data-category="all">Semua</button>
-                </li>
-                <li class="nav-item">
-                <button class="nav-link" data-category="Makanan">Makanan</button>
-                </li>
-                <li class="nav-item">
-                <button class="nav-link" data-category="minuman">Minuman</button>
-                </li>
-                {{-- @foreach($categories as $category)
-                <li class="nav-item">
-                <button class="nav-link" data-category="{{ $category }}">{{ ucfirst($category) }}</button>
-                </li>
-                @endforeach --}}
-            </ul>
+          <ul class="nav nav-pills" id="category-tabs">
+            <li class="nav-item">
+              <button class="nav-link active" data-category="all">Semua</button>
+            </li>
+          </ul>
         </div>
-        <div class="row g-3" id="product-grid" style="max-height: 500px; overflow-y: auto;">
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
-              <div class="card-img-wrapper position-relative">
-                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
-              </div>
-              <div class="card-body p-2">
-                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
-                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
-                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
-                  <i class="bx bx-plus"></i> Tambah
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
-              <div class="card-img-wrapper position-relative">
-                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
-              </div>
-              <div class="card-body p-2">
-                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
-                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
-                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
-                  <i class="bx bx-plus"></i> Tambah
-                </button>
+
+
+        <div class="row g-3 mb-3" id="product-grid" style="max-height: 500px; overflow-y: auto;">
+          @foreach($barangs as $barang)
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="card product-card h-100"
+                  data-category="{{ $barang->kategori ?? 'umum' }}"
+                  data-id="{{ $barang->id }}"
+                  data-name="{{ $barang->nam }}"
+                  data-price="{{ $barang->hargajual }}">
+                <div class="card-body p-2">
+                  <div class="card-img-wrapper position-relative my-3">
+                    <img src="{{ $barang->foto ? asset('foto/'.$barang->foto) : asset('foto/nopict.jpg') }}" 
+                        class="card-img-top" 
+                        alt="{{ $barang->nam }}">
+                  </div>
+                  <h6 class="card-title mb-1 text-truncate">{{ $barang->nam }}</h6>
+                  <p class="card-text text-primary fw-bold mb-2">
+                    Rp {{ number_format($barang->hargajual, 0, ',', '.') }}
+                  </p>
+                  <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
+                    <i class="bx bx-plus"></i> Tambah
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
-              <div class="card-img-wrapper position-relative">
-                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
-              </div>
-              <div class="card-body p-2">
-                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
-                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
-                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
-                  <i class="bx bx-plus"></i> Tambah
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
-              <div class="card-img-wrapper position-relative">
-                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
-              </div>
-              <div class="card-body p-2">
-                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
-                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
-                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
-                  <i class="bx bx-plus"></i> Tambah
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card product-card h-100" data-category="minuman" data-id="1" data-name="Iced Coffee" data-price="15000">
-              <div class="card-img-wrapper position-relative">
-                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
-              </div>
-              <div class="card-body p-2">
-                <h6 class="card-title mb-1 text-truncate">Iced Coffee</h6>
-                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
-                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
-                  <i class="bx bx-plus"></i> Tambah
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card product-card h-100" data-category="Makanan" data-id="2" data-name="Es Kopi" data-price="15000">
-              <div class="card-img-wrapper position-relative">
-                <img src="{{ asset('foto/foto.jpg') }}" class="card-img-top" alt="Iced Coffee">
-              </div>
-              <div class="card-body p-2">
-                <h6 class="card-title mb-1 text-truncate">Es Kopi</h6>
-                <p class="card-text text-primary fw-bold mb-2">Rp 15.000</p>
-                <button class="btn btn-outline-primary btn-sm w-100 add-to-cart">
-                  <i class="bx bx-plus"></i> Tambah
-                </button>
-              </div>
-            </div>
-          </div>
+          @endforeach
         </div>
       </div>
     </div>
@@ -249,7 +167,6 @@
   @csrf
   <input type="hidden" name="idpelanggan" id="form-customer">
   <input type="hidden" name="nohp" id="form-phone">
-  <input type="hidden" name="noinvoice" value="INV{{ date('YmdHis') }}">
   <input type="hidden" name="tanggalbooking" value="{{ date('Y-m-d') }}">
   <input type="hidden" name="items" id="form-items">
 </form>
@@ -261,8 +178,9 @@
   let cart = [];
   let cartTotal = 0;
 
-  // Add to cart functionality
+  // Event delegation for dynamic elements
   document.addEventListener('click', function(e) {
+    // Add to cart
     if (e.target.closest('.add-to-cart')) {
       e.preventDefault();
       const productCard = e.target.closest('.product-card');
@@ -283,44 +201,52 @@
       removeFromCart(itemId);
     }
 
-    // Update quantity
-    if (e.target.classList.contains('qty-btn')) {
+    // Quantity buttons
+    if (e.target.classList.contains('qty-btn') || e.target.closest('.qty-btn')) {
       e.preventDefault();
-      const cartItem = e.target.closest('.cart-item');
+      const button = e.target.classList.contains('qty-btn') ? e.target : e.target.closest('.qty-btn');
+      const cartItem = button.closest('.cart-item');
       const itemId = cartItem.dataset.id;
-      const action = e.target.dataset.action;
+      const action = button.dataset.action;
       updateQuantity(itemId, action);
     }
 
     // Category filter
     if (e.target.hasAttribute('data-category')) {
       e.preventDefault();
-      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      document.querySelectorAll('[data-category]').forEach(link => link.classList.remove('active'));
       e.target.classList.add('active');
       filterProducts(e.target.dataset.category);
     }
   });
 
   function addToCart(product) {
+    console.log('Adding to cart:', product); // Debug log
+    
     const existingItem = cart.find(item => item.id === product.id);
     
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push(product);
+      cart.push({ ...product }); // Create new object to avoid reference issues
     }
     
+    console.log('Cart after add:', cart); // Debug log
     updateCartDisplay();
     showToast('success', `${product.name} ditambahkan ke keranjang`);
   }
 
   function removeFromCart(itemId) {
+    console.log('Removing from cart:', itemId); // Debug log
     cart = cart.filter(item => item.id !== itemId);
+    console.log('Cart after remove:', cart); // Debug log
     updateCartDisplay();
     showToast('info', 'Item dihapus dari keranjang');
   }
 
   function updateQuantity(itemId, action) {
+    console.log('Updating quantity:', itemId, action); // Debug log
+    
     const item = cart.find(item => item.id === itemId);
     if (!item) return;
 
@@ -328,25 +254,39 @@
       item.quantity += 1;
     } else if (action === 'decrease' && item.quantity > 1) {
       item.quantity -= 1;
+    } else if (action === 'decrease' && item.quantity === 1) {
+      // Remove item if quantity becomes 0
+      removeFromCart(itemId);
+      return;
     }
     
+    console.log('Item after quantity update:', item); // Debug log
     updateCartDisplay();
   }
 
   function updateCartDisplay() {
+    console.log('Updating cart display, current cart:', cart); // Debug log
+    
     const cartItemsContainer = document.querySelector('.cart-items');
-    const emptyCart = document.getElementById('empty-cart');
     const cartCount = document.getElementById('cart-count');
     const subtotal = document.getElementById('subtotal');
     const totalItems = document.getElementById('total-items');
     const processBtn = document.getElementById('process-order');
 
     if (cart.length === 0) {
-      cartItemsContainer.innerHTML = '<div class="text-center p-4" id="empty-cart"><i class="bx bx-cart text-muted" style="font-size: 3rem;"></i><p class="text-muted mt-2">Keranjang masih kosong</p></div>';
-      cartCount.textContent = '0';
-      subtotal.textContent = 'Rp 0';
-      totalItems.textContent = '0';
-      processBtn.disabled = true;
+      cartItemsContainer.innerHTML = `
+        <div class="text-center p-4" id="empty-cart">
+          <i class="bx bx-cart text-muted" style="font-size: 3rem;"></i>
+          <p class="text-muted mt-2">Keranjang masih kosong</p>
+        </div>
+      `;
+      
+      if (cartCount) cartCount.textContent = '0';
+      if (subtotal) subtotal.textContent = 'Rp 0';
+      if (totalItems) totalItems.textContent = '0';
+      if (processBtn) processBtn.disabled = true;
+      
+      cartTotal = 0;
       return;
     }
 
@@ -369,13 +309,17 @@
           </div>
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-              <button class="btn btn-outline-secondary btn-sm qty-btn" data-action="decrease">-</button>
+              <button class="btn btn-outline-secondary btn-sm qty-btn" data-action="decrease">
+                <i class="bx bx-minus"></i>
+              </button>
               <span class="mx-2 fw-bold">${item.quantity}</span>
-              <button class="btn btn-outline-secondary btn-sm qty-btn" data-action="increase">+</button>
+              <button class="btn btn-outline-secondary btn-sm qty-btn" data-action="increase">
+                <i class="bx bx-plus"></i>
+              </button>
             </div>
             <div class="text-end">
               <div class="text-muted small">Rp ${numberFormat(item.price)}</div>
-              <div class="fw-bold">Rp ${numberFormat(itemTotal)}</div>
+              <div class="fw-bold text-success">Rp ${numberFormat(itemTotal)}</div>
             </div>
           </div>
         </div>
@@ -383,20 +327,26 @@
     });
 
     cartItemsContainer.innerHTML = html;
-    cartCount.textContent = itemCount;
-    subtotal.textContent = `Rp ${numberFormat(total)}`;
-    totalItems.textContent = itemCount;
-    processBtn.disabled = false;
+    
+    // Update display elements
+    if (cartCount) cartCount.textContent = itemCount;
+    if (subtotal) subtotal.textContent = `Rp ${numberFormat(total)}`;
+    if (totalItems) totalItems.textContent = itemCount;
+    if (processBtn) processBtn.disabled = false;
+    
     cartTotal = total;
+    
+    console.log('Display updated - Total:', total, 'Items:', itemCount); // Debug log
   }
 
   function filterProducts(category) {
     const products = document.querySelectorAll('.product-card');
     products.forEach(product => {
+      const productColumn = product.closest('.col-6, .col-md-4, .col-lg-3');
       if (category === 'all' || product.dataset.category === category) {
-        product.closest('.col-6').style.display = 'block';
+        productColumn.style.display = 'block';
       } else {
-        product.closest('.col-6').style.display = 'none';
+        productColumn.style.display = 'none';
       }
     });
   }
@@ -408,17 +358,18 @@
     
     products.forEach(product => {
       const productName = product.dataset.name.toLowerCase();
+      const productColumn = product.closest('.col-6, .col-md-4, .col-lg-3');
+      
       if (productName.includes(searchTerm)) {
-        product.closest('.col-6').style.display = 'block';
+        productColumn.style.display = 'block';
       } else {
-        product.closest('.col-6').style.display = 'none';
+        productColumn.style.display = 'none';
       }
     });
   });
 
   // Process order
   document.getElementById('process-order').addEventListener('click', function() {
-    const customer = document.getElementById('customer-select').value;
     const phone = document.getElementById('customer-phone').value;
 
     if (!phone.trim()) {
@@ -432,40 +383,67 @@
     }
 
     // Prepare form data
-    document.getElementById('form-customer').value = customer;
+    document.getElementById('form-customer').value = '';
     document.getElementById('form-phone').value = phone;
     document.getElementById('form-items').value = JSON.stringify(cart);
 
-    // Submit form
-    document.getElementById('sales-form').submit();
+    // Confirmation
+    if (confirm(`Proses pesanan dengan total Rp ${numberFormat(cartTotal)}?`)) {
+      document.getElementById('sales-form').submit();
+    }
   });
 
+  // Refresh products
+  document.getElementById('refresh-products')?.addEventListener('click', function() {
+    showToast('info', 'Produk telah diperbarui');
+    location.reload();
+  });
+
+  // Utility functions
   function numberFormat(number) {
     return new Intl.NumberFormat('id-ID').format(number);
   }
 
   function showToast(type, message) {
-    // Simple toast notification (you can replace with your preferred toast library)
+    // Remove existing toasts
+    const existingToasts = document.querySelectorAll('.toast-notification');
+    existingToasts.forEach(toast => toast.remove());
+    
     const toast = document.createElement('div');
-    toast.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} position-fixed`;
-    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    toast.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} position-fixed toast-notification`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; animation: slideIn 0.3s ease;';
     toast.innerHTML = `
       <div class="d-flex align-items-center">
         <i class="bx bx-${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : 'info-circle'} me-2"></i>
         ${message}
+        <button type="button" class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
       </div>
     `;
     
     document.body.appendChild(toast);
     
+    // Auto remove after 3 seconds
     setTimeout(() => {
-      toast.remove();
+      if (toast.parentNode) {
+        toast.remove();
+      }
     }, 3000);
   }
 
-  // Refresh products
-  document.getElementById('refresh-products').addEventListener('click', function() {
-    showToast('info', 'Produk telah diperbarui');
+  // Initialize
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('POS System initialized');
+    updateCartDisplay(); // Initial display update
   });
+
+  // Add some CSS for toast animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  `;
+  document.head.appendChild(style);
 </script>
 @endsection

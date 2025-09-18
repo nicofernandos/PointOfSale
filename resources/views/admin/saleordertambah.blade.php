@@ -1,5 +1,5 @@
 @extends('layouts.admintemplate')
-@section('title','Point of Sale - Penjualan')
+@section('title','Point of Sale - Sale Order')
 @section('content')
 @section('styles')
 <style>
@@ -80,7 +80,7 @@
     <div class="card h-100">
       <div class="card-header d-flex align-items-center justify-content-between bg-primary text-white">
         <h5 class="mb-0 text-white">
-          <i class="bx bx-shopping-bag me-2"></i>Keranjang  
+          <i class="bx bx-shopping-bag me-2"></i>Keranjang Sale Order  
         </h5>
         <span class="badge bg-light text-primary" id="cart-count">0</span>
       </div>
@@ -178,7 +178,7 @@
 </div>
 
 <!-- Hidden Form for Submission -->
-<form id="sales-form" action="{{ url('penjualantambahsimpan') }}" method="POST" style="display: none;">
+<form id="sales-form" action="{{ url('saleordertambahsimpan') }}" method="POST" style="display: none;">
   @csrf
   <input type="hidden" name="idpelanggan" id="form-customer">
   <input type="hidden" name="nohp" id="form-phone">

@@ -3,7 +3,10 @@ namespace App\Http\Controllers;
 use App\Models\Kamar;
 use App\Models\Layanantambahan;
 use App\Models\Pelanggan;
+use App\Models\Penjualan;
 use App\Models\Booking;
+use App\Models\Tsaleorder;
+use App\Models\Tsaleorder1;
 use App\Models\Kamarfoto;
 use App\Models\Barang;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
@@ -13,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Container\Attributes\DB;
 use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
 
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
@@ -54,177 +59,6 @@ class AdminController extends Controller
         ));
     }
 
-
-    public function produk()
-    {
-        $kamars = Kamar::with('fotos')->get(); 
-        return view('admin.produk', compact('kamars'));
-    }
-
-    public function tambahproduk()
-    {
-        return view('admin.produktambah');
-    }
-    
-    public function barangtambahsimpan(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'namakamar' => 'required|string|max:100',
-            'harga' => 'required|numeric|min:0',
-            'deskripsi' => 'required|string',
-            'foto' => 'required|array|min:1|max:5',
-            'foto.*' => 'required|file|image|mimes:jpeg,jpg,png|max:2048', // max 2MB
-        ], [
-            'namakamar.required' => 'Nama kamar wajib diisi',
-            'harga.required' => 'Harga kamar wajib diisi',
-            'harga.numeric' => 'Harga harus berupa angka',
-            'deskripsi.required' => 'Deskripsi kamar wajib diisi',
-            'foto.required' => 'Minimal harus mengupload 1 foto',
-            'foto.min' => 'Minimal harus mengupload 1 foto',
-            'foto.max' => 'Maksimal 5 foto per kamar',
-            'foto.*.required' => 'File foto wajib dipilih',
-            'foto.*.image' => 'File harus berupa gambar',
-            'foto.*.mimes' => 'Format foto harus JPG, JPEG, atau PNG',
-            'foto.*.max' => 'Ukuran foto maksimal 2MB',
-        ]);
-
-        try {
-            // Mulai database transaction
-            \DB::beginTransaction();
-
-            // Simpan data kamar
-            $kamar = Kamar::create([
-                'namakamar' => $request->namakamar,
-                'harga' => $request->harga,
-                'deskripsi' => $request->deskripsi,
-            ]);
-
-            // Proses upload foto
-            if ($request->hasFile('foto')) {
-                $uploadedFiles = [];
-                
-                foreach ($request->file('foto') as $index => $foto) {
-                    if ($foto->isValid()) {
-                        // Generate nama file unik
-                        $originalName = $foto->getClientOriginalName();
-                        $extension = $foto->getClientOriginalExtension();
-                        $fileName = 'kamar_' . $kamar->idkamar . '_' . ($index + 1) . '_' . time() . '.' . $extension;
-                        
-                        // Simpan file ke storage/app/public/kamar_photos
-                        $filePath = $foto->storeAs('kamar_photos', $fileName, 'public');
-                        
-                        // Simpan informasi foto ke database
-                        Kamarfoto::create([
-                            'idkamar' => $kamar->idkamar,
-                            'foto' => $fileName, // Simpan nama file saja
-                        ]);
-                        
-                        $uploadedFiles[] = $fileName;
-                    }
-                }
-                
-                // Log untuk debugging
-                \Log::info('Foto kamar berhasil diupload', [
-                    'kamar_id' => $kamar->idkamar,
-                    'files' => $uploadedFiles
-                ]);
-            }
-
-            // Commit transaction
-            \DB::commit();
-            
-            return redirect('kamar')->with('success', 'Data Kamar dan Foto Berhasil Ditambahkan');
-            
-        } catch (\Exception $e) {
-            // Rollback jika ada error
-            \DB::rollback();
-            
-            // Hapus file yang sudah terupload jika ada error
-            if (isset($uploadedFiles)) {
-                foreach ($uploadedFiles as $file) {
-                    Storage::disk('public')->delete('kamar_photos/' . $file);
-                }
-            }
-            
-            \Log::error('Error upload foto kamar: ' . $e->getMessage());
-            
-            return redirect()->back()
-                ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.'])
-                ->withInput();
-        }
-    }
-
-     public function barangedit($id)
-    {
-        $kamar = Kamar::with('fotos')->findOrFail($id);
-        return view('admin.barangedit', compact('kamar'));
-    }
-
-    public function barangeditupdate(Request $request, $id)
-    {
-        $request->validate([
-            'namakamar' => 'required|string|max:255',
-            'harga'     => 'required|numeric|min:0',
-            'deskripsi' => 'required|string',
-            'foto.*'    => 'nullable|file|image|mimes:jpeg,jpg,png|max:2048',
-        ]);
-
-        FacadesDB::beginTransaction();
-        try {
-            $kamar = Kamar::findOrFail($id);
-            $kamar->update([
-                'namakamar' => $request->namakamar,
-                'harga'     => $request->harga,
-                'deskripsi' => $request->deskripsi,
-            ]);
-
-            if ($request->hasFile('foto')) {
-                foreach ($request->file('foto') as $index => $foto) {
-                    if ($foto->isValid()) {
-                        $fileName = 'kamar_' . $kamar->idkamar . '_' . time() . '_' . $index . '.' . $foto->getClientOriginalExtension();
-                        $foto->storeAs('kamar_photos', $fileName, 'public');
-                        Kamarfoto::create([
-                            'idkamar' => $kamar->idkamar,
-                            'foto'    => $fileName,
-                        ]);
-                    }
-                }
-            }
-
-            FacadesDB::commit();
-            return redirect('kamar')->with('success', 'Data kamar berhasil diperbarui');
-        } catch (\Exception $e) {
-            FacadesDB::rollBack();
-            return back()->withErrors(['error' => 'Gagal update kamar: '.$e->getMessage()]);
-        }
-    }
-
-
-
-    public function baranghapus($id)
-    {
-        FacadesDB::beginTransaction();
-        try {
-            $kamar = Kamar::findOrFail($id);
-
-            // Hapus foto dari storage
-            $fotos = Kamarfoto::where('idkamar', $id)->get();
-            foreach ($fotos as $foto) {
-                Storage::disk('public')->delete('kamar_photos/'.$foto->foto);
-                $foto->delete();
-            }
-
-            // Hapus kamar
-            $kamar->delete();
-
-            FacadesDB::commit();
-            return redirect('produk')->with('success', 'Data Produk berhasil dihapus');
-        } catch (\Exception $e) {
-            FacadesDB::rollBack();
-            return back()->withErrors(['error' => 'Gagal hapus produk: '.$e->getMessage()]);
-        }
-    }
 
     public function kategori(){
         return view('admin.kategori');
@@ -332,9 +166,156 @@ class AdminController extends Controller
     }
 
 
+    //Sales Order
+    public function saleorder(){
+        // $tsaleorder = Tsaleorder::with('salesorderdetails')
+        // ->orderBy('id','desc')
+        // ->limit(100)
+        // ->get();
+
+        // $test = Tsaleorder::with('salesorderdetails')->first();
+        // dd($test->toArray());
+
+        // $tsaleorder = Tsaleorder::with('salesorderdetails')
+        // ->orderBy('id','desc')
+        // ->limit(100)
+        // ->get();
+
+        // foreach ($tsaleorder as $so) {
+        //     dump($so->id, $so->salesorderdetails->count());
+        // }
+        // dd('done');
+
+        $tsaleorder = Tsaleorder::with('salesorderdetails')
+        ->whereHas('salesorderdetails')
+        ->orderBy('id','desc')
+        ->limit(100)
+        ->get();
+
+        return view('admin.salesorder', compact('tsaleorder'));
+    }
+
+    public function saleordertambah()
+    {
+        $barangs = FacadesDB::connection('maisecgc')
+            ->table('tbarang')
+            ->join('thargajual', 'tbarang.id', '=', 'thargajual.idbar')
+            ->leftJoin('tbarangfoto', 'tbarang.id', '=', 'tbarangfoto.idbar')
+            ->select(
+                'tbarang.*',
+                'thargajual.har as hargajual',
+                'tbarangfoto.img as foto'
+            )
+            ->get();
+
+        return view('admin.saleordertambah', compact('barangs'));
+    }
+
+
+    public function saleordertambahsimpan(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'nohp' => 'required|string|max:20',
+                'tglinput' => 'required|date',
+                'items' => 'required|json',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput()
+                    ->with('error', 'Periksa kembali barang yang ingin dipesan.');
+            }
+
+            $items = json_decode($request->input('items'), true);
+
+            \Log::info('Data barang yang ingin dipesan ', [
+                'raw_items' => $request->items,
+                'decoded_items' => $items,
+                'nohp' => $request->nohp,
+            ]);
+
+            if (empty($items) || !is_array($items)) {
+                return redirect()->back()
+                    ->withErrors(['items' => 'Tidak ada barang yang dipilih.'])
+                    ->withInput()
+                    ->with('error', 'Periksa kembali barang yang ingin dipesan.');
+            }
+
+            // Mulai transaksi
+            FacadesDB::beginTransaction();
+
+            $totalOrder = 0;
+            foreach ($items as $item) {
+                $totalOrder += $item['price'] * $item['quantity'];
+            }
+
+            $nomorSO = 'SO-' . date('Ymd') . '-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
+
+            // Simpan ke tabel tsaleorder
+            $saleorderId = FacadesDB::table('tsaleorder')->insertGetId([
+                'noso'   => $nomorSO,
+                'tgl'    => $request->input('tglinput'),
+                'tot'    => $totalOrder,
+                'iduse'  => auth()->id() ?? 1, // default 1 kalau belum ada login
+            ]);
+
+            // Simpan ke tabel tsaleorder1
+            foreach ($items as $item) {
+                if (
+                    !isset($item['id']) ||
+                    !isset($item['quantity']) ||
+                    !isset($item['price']) ||
+                    !isset($item['name'])
+                ) {
+                    throw new \Exception("Data item tidak lengkap!");
+                }
+
+                FacadesDB::table('tsaleorder1')->insert([
+                    'idso'   => $saleorderId,
+                    'tglinp' => $request->input('tglinput'),
+                    'nam'    => $item['name'],
+                    'qty'    => $item['quantity'],
+                    'sat'    => $item['satuan'] ?? null,
+                    'idbar'  => $item['id'],
+                    'har'    => $item['price'],
+                    'jum'    => $item['price'] * $item['quantity'],
+                ]);
+            }
+
+            FacadesDB::commit();
+
+            return redirect('saleorder')
+                ->with('success', "Sales Order berhasil! Nomor: {$nomorSO}");
+
+        } catch (\Exception $e) {
+            FacadesDB::rollBack();
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+
+
+
+    public function saleorderdetail($id){
+        $saleorder = Tsaleorder::with('salesorderdetails')->findOrFail($id);
+        return view('admin.salesorderdetail', compact('saleorder'));
+    }
+
+    
+
+
     //Penjualan
     public function penjualan(){
-        return view('admin.penjualan');
+        $penjualan = Penjualan::with('penjualanDetails')
+        ->orderBy('id', 'desc')
+        ->limit(100)
+        ->get();
+        return view('admin.penjualan', compact('penjualan'));
     }
 
 
@@ -348,6 +329,91 @@ class AdminController extends Controller
         return view('admin.penjualantambah', compact('barangs'));
     }
 
+    public function penjualantambahsimpan(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'nohp' => 'required|string|max:20',
+                'tglinput' => 'required|date',
+                'items' => 'required|json',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput()
+                    ->with('error', 'Periksa kembali barang yang ingin dicheckout.');
+            }
+
+            $items = json_decode($request->input('items'), true);
+
+            \Log::info('Data barang yang ingin dipesan ', [
+                'raw_items' => $request->items,
+                'decoded_items' => $items,
+                'nohp' => $request->nohp,
+            ]);
+
+            if (empty($items) || !is_array($items)) {
+                return redirect()->back()
+                    ->withErrors(['items' => 'Tidak ada barang yang dipilih.'])
+                    ->withInput()
+                    ->with('error', 'Periksa kembali barang yang ingin dicheckout.');
+            }
+
+            // Mulai transaksi
+            FacadesDB::beginTransaction();
+
+            $totalPenjualan = 0;
+            foreach ($items as $item) {
+                $totalPenjualan += $item['price'] * $item['quantity'];
+            }
+
+            $nomorTransaksi = 'TRX-' . date('Ymd') . '-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
+
+            $penjualanId = FacadesDB::table('tjual')->insertGetId([
+                'nofp'   => $nomorTransaksi,
+                'tglfp'  => $request->input('tglinput'),
+                'wakfp' => now()->format('H:i:s'), 
+                'totnet' => $totalPenjualan,
+                'nohp'   => $request->input('nohp'),
+            ]);
+
+            foreach ($items as $item) {
+                if (!isset($item['id']) || !isset($item['quantity']) || !isset($item['price']) || !isset($item['name'])) {
+                    throw new \Exception("Data item tidak lengkap!");
+                }
+
+
+                FacadesDB::table('tjual1')->insert([
+                    'idj'    => $penjualanId,
+                    'tglinp' => $request->input('tglinput'),
+                    'nam'    => $item['name'],
+                    'qty'    => $item['quantity'],
+                    'sat'   => $item['satuan'],
+                    'idbar' => $item['id'],
+                    'har'    => $item['price'],
+                    'subtot' => $item['price'] * $item['quantity'],
+                ]);
+            }
+            FacadesDB::commit();
+
+            return redirect('penjualan')
+                ->with('success', "Transaksi berhasil! Nomor: {$nomorTransaksi}");
+
+        } catch (\Exception $e) {
+            FacadesDB::rollBack();
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function penjualandetail($id)
+    {
+        $penjualan = Penjualan::with('penjualanDetails')->findOrFail($id);
+        return view('admin.penjualandetail', compact('penjualan'));
+    }
 
     //Pembelian 
     public function pembelian(){
@@ -362,339 +428,14 @@ class AdminController extends Controller
         return view('admin.pembeliantambah', compact('pelanggans', 'kamars', 'layanans'));
     }
 
-    public function bookingtambahsimpan(Request $request)
-    {
-        // Validasi data input
-        $validatedData = $request->validate([
-            'idpelanggan' => 'required|exists:pelanggan,idpelanggan',
-            'idkamar' => 'required|exists:kamar,idkamar',
-            'noinvoice' => 'required|string|max:50|unique:booking,noinvoice',
-            'tanggalbooking' => 'required|date',
-            'tanggalcheckin' => 'required|date|after_or_equal:today',
-            'tanggalcheckout' => 'required|date|after:tanggalcheckin',
-            'waktucheckin' => 'nullable|date_format:H:i',
-            'waktucheckout' => 'nullable|date_format:H:i',
-            'jumlahorang' => 'required|integer|min:1',
-            'nohp' => 'required|string|max:20',
-            'fotoidentitas' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'layanan' => 'nullable|array',
-            'layanan.*.idlayanantambahan' => 'required_with:layanan.*.jumlah|exists:layanantambahan,idlayanantambahan',
-            'layanan.*.jumlah' => 'required_with:layanan.*.idlayanantambahan|integer|min:1'
-        ], [
-            'idpelanggan.required' => 'Pelanggan harus dipilih',
-            'idkamar.required' => 'Kamar harus dipilih',
-            'noinvoice.unique' => 'No. Invoice sudah digunakan',
-            'tanggalcheckin.after_or_equal' => 'Tanggal checkin tidak boleh kurang dari hari ini',
-            'tanggalcheckout.after' => 'Tanggal checkout harus setelah tanggal checkin',
-            'jumlahorang.min' => 'Jumlah orang minimal 1',
-            'nohp.max' => 'No. HP maksimal 20 karakter',
-            'fotoidentitas.image' => 'File harus berupa gambar',
-            'fotoidentitas.max' => 'Ukuran file maksimal 2MB'
-        ]);
 
-        FacadesDB::beginTransaction();
 
-        try {
-            $namaFile = null;
-
-            // Memproses upload file fotoidentitas ke public/identitas
-            if ($request->hasFile('fotoidentitas')) {
-                $file = $request->file('fotoidentitas');
-                $namaFile = time() . '_' . $file->getClientOriginalName();
-                
-                // Pastikan folder identitas ada
-                $destinationPath = 'identitas';
-                if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0755, true);
-                }
-                
-                // Pindahkan file ke public/identitas
-                $file->move($destinationPath, $namaFile);
-            }
-
-            // Menggunakan Eloquent untuk mendapatkan data kamar
-            $kamar = Kamar::find($validatedData['idkamar']);
-            if (!$kamar) {
-                throw new \Exception('Kamar tidak ditemukan.');
-            }
-
-            // Menghitung jumlah hari dan harga kamar
-            $tanggalCheckin = Carbon::parse($validatedData['tanggalcheckin']);
-            $tanggalCheckout = Carbon::parse($validatedData['tanggalcheckout']);
-            $jumlahHari = $tanggalCheckin->diffInDays($tanggalCheckout);
-            $hargaKamar = $kamar->harga * $jumlahHari;
-
-            $totalHargaLayanan = 0;
-            $layananDetails = [];
-
-            // Memproses layanan tambahan
-            if (isset($validatedData['layanan']) && is_array($validatedData['layanan'])) {
-                foreach ($validatedData['layanan'] as $layanan) {
-                    if (!empty($layanan['idlayanantambahan']) && !empty($layanan['jumlah'])) {
-                        $dataLayanan = LayananTambahan::find($layanan['idlayanantambahan']);
-                        if ($dataLayanan) {
-                            $subtotal = $dataLayanan->hargalayanantambahan * $layanan['jumlah'];
-                            $totalHargaLayanan += $subtotal;
-
-                            $layananDetails[] = [
-                                'idlayanantambahan' => $layanan['idlayanantambahan'],
-                                'jumlah' => $layanan['jumlah'],
-                                'harga' => $dataLayanan->hargalayanantambahan,
-                                'subtotal' => $subtotal
-                            ];
-                        }
-                    }
-                }
-            }
-
-            $grandTotal = $hargaKamar + $totalHargaLayanan;
-
-            // Membuat entri booking baru
-            $booking = Booking::create([
-                'idpelanggan' => $validatedData['idpelanggan'],
-                'idkamar' => $validatedData['idkamar'],
-                'noinvoice' => $validatedData['noinvoice'],
-                'tanggalbooking' => $validatedData['tanggalbooking'],
-                'tanggalcheckin' => $validatedData['tanggalcheckin'],
-                'waktucheckin' => $validatedData['waktucheckin'],
-                'tanggalcheckout' => $validatedData['tanggalcheckout'],
-                'waktucheckout' => $validatedData['waktucheckout'],
-                'jumlahorang' => $validatedData['jumlahorang'],
-                'nohp' => $validatedData['nohp'],
-                'fotoidentitas' => $namaFile,
-                'hargakamar' => $hargaKamar,
-                'denda' => 0.00,
-                'grandtotal' => $grandTotal
-            ]);
-            
-            // Menyimpan detail layanan tambahan
-            foreach ($layananDetails as $detail) {
-                FacadesDB::table('bookingdetail')->insert([
-                    'idbooking' => $booking->idbooking,
-                    'idlayanantambahan' => $detail['idlayanantambahan'],
-                    'jumlah' => $detail['jumlah'],
-                    'harga' => $detail['harga'],
-                    'subtotal' => $detail['subtotal']
-                ]);
-            }
-
-            FacadesDB::commit();
-
-            return redirect('pembelian')->with('success', 'Booking berhasil ditambahkan dengan No. Invoice: ' . $validatedData['noinvoice']);
-            
-        } catch (\Exception $e) {
-            FacadesDB::rollback();
-            
-            // Hapus file jika ada error (sesuaikan path untuk public/identitas)
-            if ($namaFile && file_exists(public_path('identitas/' . $namaFile))) {
-                unlink(public_path('identitas/' . $namaFile));
-            }
-
-            return redirect('booking')->withInput()->with('error', 'Gagal menyimpan booking: ' . $e->getMessage());
-        }
-    }
     
-    public function bookingedit($id)
-    {
-        $booking = FacadesDB::table('booking')
-            ->join('pelanggan', 'booking.idpelanggan', '=', 'pelanggan.idpelanggan')
-            ->join('kamar', 'booking.idkamar', '=', 'kamar.idkamar')
-            ->where('booking.idbooking', $id)
-            ->first();
-        
-        if (!$booking) {
-            return redirect('booking')->with('error', 'Data booking tidak ditemukan');
-        }
-        $bookingDetails = FacadesDB::table('bookingdetail')
-            ->join('layanantambahan', 'bookingdetail.idlayanantambahan', '=', 'layanantambahan.idlayanantambahan')
-            ->where('bookingdetail.idbooking', $id)
-            ->get();
-        $booking->layanantambahan = $bookingDetails;
 
-        $pelanggans = Pelanggan::all();
-        $kamars = Kamar::all();
-        $layanans = Layanantambahan::all();
-        
-        return view('admin.bookingedit', compact('booking', 'pelanggans', 'kamars', 'layanans'));
-    }
-
-        public function bookingeditsimpan(Request $request, $id)
-    {
-        // Log request data
-        \Log::info('Booking Edit Request Data:', $request->all());
-
-        $request->validate([
-            'idpelanggan' => 'required|exists:pelanggan,idpelanggan',
-            'idkamar' => 'required|exists:kamar,idkamar',
-            'noinvoice' => 'required|string|max:50|unique:booking,noinvoice,' . $id . ',idbooking',
-            'tanggalbooking' => 'required|date',
-            'tanggalcheckin' => 'required|date',
-            'tanggalcheckout' => 'required|date|after:tanggalcheckin',
-            'waktucheckin' => 'nullable',
-            'waktucheckout' => 'nullable',
-            'jumlahorang' => 'required|integer|min:1',
-            'nohp' => 'required|string|max:20',
-            'fotoidentitas' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'layanan' => 'nullable|array',
-            'layanan.*.idlayanantambahan' => 'required_with:layanan.*.jumlah|exists:layanantambahan,idlayanantambahan',
-            'layanan.*.jumlah' => 'required_with:layanan.*.idlayanantambahan|integer|min:1'
-        ], [
-            'idpelanggan.required' => 'Pelanggan harus dipilih',
-            'idkamar.required' => 'Kamar harus dipilih',
-            'noinvoice.unique' => 'No. Invoice sudah digunakan',
-            'tanggalcheckout.after' => 'Tanggal checkout harus setelah tanggal checkin',
-            'jumlahorang.min' => 'Jumlah orang minimal 1',
-            'nohp.max' => 'No. HP maksimal 20 karakter',
-            'fotoidentitas.image' => 'File harus berupa gambar',
-            'fotoidentitas.max' => 'Ukuran file maksimal 2MB'
-        ]);
-
-        // Cek apakah booking exists
-        $bookingExists = Booking::find($id);
-        if (!$bookingExists) {
-            return redirect('booking')->with('error', 'Data booking tidak ditemukan');
-        }
-
-        FacadesDB::beginTransaction();
-        
-        $namaFile = $bookingExists->fotoidentitas;
-        $folderPath = 'identitas';
-
-        try {
-            // Catatan: Menggunakan path absolut seperti ini tidak disarankan untuk
-            // produksi karena tidak portabel. Sebaiknya gunakan public_path()
-            // atau konfigurasi Filesystem.
-
-            // 2. Handle upload foto baru dan hapus foto lama
-            if ($request->hasFile('fotoidentitas')) {
-                // Hapus foto lama jika ada
-                if ($bookingExists->fotoidentitas) {
-                    $oldFilePath = $folderPath . '/' . $bookingExists->fotoidentitas;
-                    if (File::exists($oldFilePath)) {
-                        File::delete($oldFilePath);
-                    }
-                }
-
-                // Simpan foto baru ke path yang ditentukan
-                $file = $request->file('fotoidentitas');
-                $namaFile = time() . '_' . $file->getClientOriginalName();
-                $file->move($folderPath, $namaFile);
-            }
-
-            // 3. Hitung ulang harga kamar
-            $kamar = Kamar::find($request->idkamar);
-            if (!$kamar) {
-                throw new \Exception('Kamar tidak ditemukan');
-            }
-            
-            $tanggalCheckin = Carbon::parse($request->tanggalcheckin);
-            $tanggalCheckout = Carbon::parse($request->tanggalcheckout);
-            $jumlahHari = max(1, $tanggalCheckin->diffInDays($tanggalCheckout));
-            $hargaKamar = $kamar->harga * $jumlahHari;
-
-            // 4. Hitung total harga layanan tambahan
-            $totalHargaLayanan = 0;
-            $layananDetails = [];
-
-            if ($request->has('layanan') && is_array($request->layanan)) {
-                foreach ($request->layanan as $layanan) {
-                    if (isset($layanan['idlayanantambahan']) && !empty($layanan['idlayanantambahan']) && 
-                        isset($layanan['jumlah']) && !empty($layanan['jumlah']) && $layanan['jumlah'] > 0) {
-                        
-                        $dataLayanan = LayananTambahan::find($layanan['idlayanantambahan']);
-    
-                        if ($dataLayanan) {
-                            $subtotal = $dataLayanan->hargalayanantambahan * $layanan['jumlah'];
-                            $totalHargaLayanan += $subtotal;
-
-                            $layananDetails[] = [
-                                'idlayanantambahan' => $layanan['idlayanantambahan'],
-                                'jumlah' => $layanan['jumlah'],
-                                'harga' => $dataLayanan->hargalayanantambahan,
-                                'subtotal' => $subtotal
-                            ];
-                        }
-                    }
-                }
-            }
-
-            // Pastikan denda tidak null
-            $denda = $bookingExists->denda ?? 0;
-            $grandTotal = $hargaKamar + $totalHargaLayanan + $denda;
-
-            // 5. Prepare data untuk update
-            $updateData = [
-                'idpelanggan' => $request->idpelanggan,
-                'idkamar' => $request->idkamar,
-                'noinvoice' => $request->noinvoice,
-                'tanggalbooking' => $request->tanggalbooking,
-                'tanggalcheckin' => $request->tanggalcheckin,
-                'tanggalcheckout' => $request->tanggalcheckout,
-                'jumlahorang' => $request->jumlahorang,
-                'nohp' => $request->nohp,
-                'fotoidentitas' => $namaFile,
-                'hargakamar' => $hargaKamar,
-                'grandtotal' => $grandTotal
-            ];
-
-            // Tambahkan waktu checkin/checkout jika ada
-            if ($request->waktucheckin) {
-                $updateData['waktucheckin'] = $request->waktucheckin;
-            }
-            if ($request->waktucheckout) {
-                $updateData['waktucheckout'] = $request->waktucheckout;
-            }
-
-            // 6. Update data booking
-            $updated = $bookingExists->update($updateData);
-
-            // Log apakah update berhasil
-            \Log::info('Booking Update Result:', ['updated' => $updated, 'id' => $id]);
-
-            // Hapus semua booking detail yang lama
-            FacadesDB::table('bookingdetail')->where('idbooking', $id)->delete();
-
-            // Insert booking detail yang baru
-            if (!empty($layananDetails)) {
-                // Tambahkan idbooking ke setiap item di layananDetails sebelum insert
-                $layananDetailsWithBookingId = array_map(function($detail) use ($id) {
-                    $detail['idbooking'] = $id;
-                    return $detail;
-                }, $layananDetails);
-                FacadesDB::table('bookingdetail')->insert($layananDetailsWithBookingId);
-            }
-
-            FacadesDB::commit();
-
-            return redirect('booking')->with('success', 'Booking berhasil diupdate dengan No. Invoice: ' . $request->noinvoice);
-
-        } catch (\Exception $e) {
-            FacadesDB::rollback();
-            
-            // Log error untuk debugging
-            \Log::error('Booking Update Error:', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'request_data' => $request->all()
-            ]);
-            
-            // Hapus foto baru yang diunggah jika terjadi error
-            if ($request->hasFile('fotoidentitas') && $namaFile !== $bookingExists->fotoidentitas) {
-                $newFilePath = $folderPath . '/' . $namaFile;
-                if (File::exists($newFilePath)) {
-                    File::delete($newFilePath);
-                }
-            }
-
-            return redirect()->back()->withInput()->with('error', 'Gagal mengupdate booking: ' . $e->getMessage());
-        }
-    }
-
-    public function bookinghapus($id){
-        FacadesDB::table('booking')->where('idbooking', $id)->delete();
-        return redirect('booking')->with('success', 'Booking Berhasil Dihapus');
-    }
-
+    // public function bookinghapus($id){
+    //     FacadesDB::table('booking')->where('idbooking', $id)->delete();
+    //     return redirect('booking')->with('success', 'Booking Berhasil Dihapus');
+    // }
 
 
     // Pengguna

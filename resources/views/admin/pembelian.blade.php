@@ -1,9 +1,9 @@
 @extends('layouts.admintemplate')
-@section('title','Data Booking')
+@section('title','Data Pembelian')
 @section('content')
 
 <div class="card">
-    <h5 class="card-header">Data Booking</h5>
+    <h5 class="card-header">Data Pembelian</h5>
     <div class="card-body">
         <div class="table-responsive text-nowrap">
             <table class="table table-bordered">

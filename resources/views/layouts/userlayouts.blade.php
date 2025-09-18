@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>@yield('title', 'Dashboard - Admin Panel')</title>
+    <title>@yield('title', 'Point Of Sale')</title>
     <meta name="description" content="" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -143,26 +143,23 @@
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <!-- Sidebar overlay -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        {{-- <div class="sidebar-overlay" id="sidebarOverlay"></div> --}}
         
         <div class="layout-container">
             <!-- Menu - Sidebar yang tersembunyi -->
-            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-                <div class="app-brand demo">
+            {{-- <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme"> --}}
+                {{-- <div class="app-brand demo">
                     <a href="{{ url('/dashboard') }}" class="app-brand-link">
                         <span class="app-brand-text demo menu-text fw-bolder text-uppercase ms-2">POS</span>
                     </a>
-
-                    <!-- Tombol close sidebar -->
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" id="closeSidebar">
-                        {{-- <i class="bx bx-x bx-sm align-middle "></i> --}}
+                        <i class="bx bx-x bx-sm align-middle "></i>
                     </a>
-                </div>
+                </div> --}}
+{{-- 
+                <div class="menu-inner-shadow"></div> --}}
 
-                <div class="menu-inner-shadow"></div>
-
-                <ul class="menu-inner py-1">
-                    <!-- Dashboard -->
+                {{-- <ul class="menu-inner py-1">
                     <li class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                         <a href="{{ url('dashboard') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
@@ -171,7 +168,6 @@
                     </li>
 
                     @if(Auth::user()->role == 'Admin')
-                    <!-- Data Management -->
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">Data Management</span></li>
                     <li class="menu-item {{ request()->is('produk*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -321,25 +317,25 @@
                     </li>
 
                     @endif
-                </ul>
-            </aside>
+                </ul> --}}
+            {{-- </aside> --}}
             <!-- / Menu -->
 
             <!-- Layout container -->
             <div class="layout-page ">
                 <!-- Navbar -->
-                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+                {{-- <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar"> --}}
                     <!-- Tombol toggle sidebar -->
                     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-block">
                         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)" id="toggleSidebar">
-                            <i class="bx bx-menu bx-sm"></i>
+                            {{-- <i class="bx bx-menu bx-sm"></i> --}}
                         </a>
                     </div>
 
-                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+                    {{-- <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                        <ul class="navbar-nav flex-row align-items-center ms-auto"> --}}
                             <!-- User -->
-                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                            {{-- <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
                                         <img src="{{ asset('adminasset/assets/img/avatars/profile.png') }}" alt class="w-px-40 h-auto rounded-circle" />
@@ -379,10 +375,10 @@
                                         </form>
                                     </li>
                                 </ul>
-                            </li>
-                            <!--/ User -->
-                        </ul>
-                    </div>
+                            </li> --}}
+                            <!--/ User -->  
+                        {{-- </ul>
+                    </div> --}}
                 </nav>
                 <!-- / Navbar -->
 

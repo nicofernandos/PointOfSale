@@ -2,11 +2,16 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/saleorder',[UserController::class, 'saleorder']);
+Route::post('/savesaleorder',[UserController::class, 'savesaleorder']);
+Route::get('/listsaleorder/{id}',[UserController::class,'listsaleorder']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -17,14 +22,6 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
     Route::put('/profileupdate', 'profileupdate');
 
     Route::get('/dashboard', 'dashboard');
-
-    //Barang
-    Route::get('/produk', 'produk');
-    Route::get('/tambahproduk', 'tambahproduk');
-    Route::post('/barangtambahsimpan', 'barangtambahsimpan');
-    Route::get('/barangedit/{id}', 'barangedit');
-    Route::put('/barangeditupdate/{id}', 'barangeditupdate');
-    Route::delete('/baranghapus/{id}', 'baranghapus');
 
     //Stok 
     Route::get('/stok', 'stok');
@@ -58,17 +55,28 @@ Route::middleware(['isLogin'])->controller(AdminController::class)->group(functi
     Route::get('/pembelianedit/{id}', 'pembelianedit');
     Route::put('/pembelianeditsimpan/{id}', 'pembelianeditsimpan');
     Route::delete('/pembelianhapus/{id}', 'pembelianhapus');
-    Route::get('/pembeliandetail/{id}', 'pembeliandetail');
+    Route::get('/pembeliandetail/', 'pembeliandetail');
 
 
     //Penjualan
     Route::get('/penjualan','penjualan');
     Route::get('/penjualantambah','penjualantambah');
-    Route::get('penjualantambahsimpan','penjualantambahsimpan');
+    Route::post ('penjualantambahsimpan','penjualantambahsimpan');
     Route::get('/penjualanedit/{id}','penjualanedit');
     Route::get('/penjualaneditsimpan/{id}','penjualaneditsimpan');
     Route::get('/penjualanhapus','penjualanhapus');
     Route::get('/pembeliandetail','pembeliandetail');
+    Route::get('/penjualandetail/{id}', 'penjualandetail');
+
+
+    //Sales Order
+    // Route::get('/saleorder','saleorder');
+    // Route::get('/saleordertambah','saleordertambah');
+    // Route::post('saleordertambahsimpan','saleordertambahsimpan');
+    // Route::get('/saleorderedit/{id}','saleorderedit');
+    // Route::put('/saleordereditsimpan/{id}','saleordereditsimpan');
+    // Route::delete('/saleorderhapus/{id}','saleorderhapus');
+    // Route::get('/saleorderdetail/{id}','saleorderdetail');
 
 
     //Laporan Tamu

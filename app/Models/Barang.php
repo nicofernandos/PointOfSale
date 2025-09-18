@@ -39,4 +39,9 @@ class Barang extends Model
         'useid'
     ];
 
+    
+
+
+
+
 }
